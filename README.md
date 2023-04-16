@@ -2,7 +2,7 @@
 
 ## Collection of healthcare-inspired prompts for Large Language Models (LLMs)
 
-![Prompt Engineering](https://nuchange.ca/wp-content/uploads/2018/10/natural-language-processing.jpgg)
+![Prompt Engineering](images/medprompt.jpg)
 
 ## About
 Prompt engineering is the process of designing and constructing effective prompts for LLMs. The goal of prompt engineering is to provide the LLM with the necessary information and context to generate accurate and relevant responses. **MEDPrompt** is a user contributed collection of prompts for medical applications.
