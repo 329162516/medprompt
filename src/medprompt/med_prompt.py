@@ -3,11 +3,11 @@ from jinja2 import Environment, FileSystemLoader, meta
 
 from importlib import resources
 
-class Medprompt:
+class MedPrompter:
     def __init__(
         self,
         template_path: str = None,
-        template_name: str = None,
+        template_name: str = 'fhir-search-openai-chat.jinja',
         allowed_missing_variables: Optional[List[str]] = None,
         default_variable_values: Optional[Dict[str, Any]] = None,
         ):
@@ -47,39 +47,5 @@ class Medprompt:
 
 
 
-    # def get_template_ast_as_yaml(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=yaml.Dumper)
 
-    # def get_template_ast_as_toml(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=toml.Dumper)
-
-    # def get_template_ast_as_xml(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_html(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_csv(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_tsv(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_jsonl(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_yaml(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_toml(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_xml(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_html(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
-
-    # def get_template_ast_as_csv(self) -> str:
-    #     return self.env.dump(self.ast, Dumper=xmltodict.unparse)
 
