@@ -9,7 +9,7 @@ class MedPrompter(object):
         template_name: str = "default.jinja",
         template_path: str = None,
         allowed_missing_variables: Optional[List[str]] = None,
-        default_variable_values: Optional[Dict[str, Any]] = None,
+        # default_variable_values: Optional[Dict[str, Any]] = None,
         ):
         if template_path is None:
             self.template_path = resource_filename(__name__, "templates")
@@ -26,17 +26,15 @@ class MedPrompter(object):
             "description",
             "output_format",
         ]
-        self.default_variable_values = default_variable_values or {}
+        # self.default_variable_values = default_variable_values or {}
 
 
     def list_templates(self) -> List[str]:
         return self.env.list_templates()
 
-    def update_template_variables(self, variables: Dict[str, Any]) -> None:
-        self.default_variable_values.update(variables)
 
     def generate_prompt(self, variables: Dict[str, Any]) -> str:
-        self.update_template_variables(variables)
+        # self.update_template_variables(variables)
         return self.template.render(variables)
 
     def get_template_variables(self) -> List[str]:
