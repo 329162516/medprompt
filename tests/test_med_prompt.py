@@ -8,5 +8,5 @@ def f():
     return _m
 
 
-def test_list_templates(f):
-    assert f.list_templates() == ['fhir-search-openai-chat.jinja']
+def test_default(f):
+    assert f.generate_prompt({"question", "Is this a test?"}) == "This is a default template"

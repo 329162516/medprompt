@@ -1,17 +1,21 @@
 from typing import List, Dict, Any, Optional
 from jinja2 import Environment, FileSystemLoader, meta
 
-from importlib import resources
+from pkg_resources import resource_filename
 
-class MedPrompter:
+class MedPrompter(object):
     def __init__(
         self,
+        template_name: str = "default.jinja",
         template_path: str = None,
-        template_name: str = 'fhir-search-openai-chat.jinja',
         allowed_missing_variables: Optional[List[str]] = None,
         default_variable_values: Optional[Dict[str, Any]] = None,
         ):
-        self.template_path = template_path
+        if template_path is None:
+            self.template_path = resource_filename(__name__, "templates")
+        else:
+            self.template_path = template_path
+        print(f"template_path: {self.template_path}")
         self.template_name = template_name
         self.env = Environment(loader=FileSystemLoader(self.template_path))
         self.template = self.env.get_template(self.template_name)
@@ -23,8 +27,7 @@ class MedPrompter:
             "output_format",
         ]
         self.default_variable_values = default_variable_values or {}
-        if template_path is None:
-            self.template_path = resources.files("medprompt.templates").__str__()
+
 
     def list_templates(self) -> List[str]:
         return self.env.list_templates()
@@ -44,8 +47,4 @@ class MedPrompter:
 
     def get_template_ast_as_json(self) -> str:
         return self.env.dump(self.ast)
-
-
-
-
 
