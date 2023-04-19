@@ -1,11 +1,13 @@
 from typing import List, Dict, Any, Optional
 from jinja2 import Environment, FileSystemLoader, meta
 
+from importlib import resources
 
 class Medprompt:
     def __init__(
-        self, template_path: str,
-        template_name: str,
+        self,
+        template_path: str = None,
+        template_name: str = None,
         allowed_missing_variables: Optional[List[str]] = None,
         default_variable_values: Optional[Dict[str, Any]] = None,
         ):
@@ -21,6 +23,8 @@ class Medprompt:
             "output_format",
         ]
         self.default_variable_values = default_variable_values or {}
+        if template_path is None:
+            self.template_path = resources.files("medprompt.templates").__str__()
 
     def list_templates(self) -> List[str]:
         return self.env.list_templates()
