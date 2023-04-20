@@ -18,6 +18,18 @@ MEDPrompt's philosophy is that application logic shouldn’t make the prompt eng
 pip install git+https://github.com/dermatologist/medprompt.git
 ```
 
+### Import
+
+```
+from medprompt import MedPrompter
+prompt = MedPrompter()
+prompt.set_template(
+    template_name="fhir-search-openai-chat.json")
+
+messages = prompt.generate_prompt(
+    {"question": "Find Conditions for patient with first name John?"})
+```
+
 ## Give us a star ⭐️
 If you find this project useful, give us a star. It helps others discover the project.
 
