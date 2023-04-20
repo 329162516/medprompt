@@ -1,0 +1,30 @@
+name: Generate and publish gh-pages
+# https://docs.github.com/en/actions/guides/building-and-testing-python
+# https://packaging.python.org/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt -r dev-requirements.txt
+    - name: Create docs
+      run: |
+        make -C docs/ html
+        cp docs/_config.yml docs/_build/html/_config.yml
+    - name: Deploy Docs 🚀
+      uses: JamesIves/github-pages-deploy-action@v4.2.5
+      with:
+        branch: gh-pages # The branch the action should deploy to.
+        folder: docs/_build/html # The folder the action should deploy.
