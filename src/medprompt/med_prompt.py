@@ -17,7 +17,7 @@
 
 
 from typing import Any, Dict, List, Optional
-
+import json
 from jinja2 import Environment, FileSystemLoader, meta
 from pkg_resources import resource_filename
 
@@ -33,8 +33,6 @@ class MedPrompter(object):
         else:
             self.template_path = template_path
         self.template_name = template_name
-        self.env = Environment(loader=FileSystemLoader(self.template_path))
-        self.template = self.env.get_template(self.template_name)
 
     def list_templates(self) -> List[str]:
         return self.env.list_templates()
@@ -44,11 +42,15 @@ class MedPrompter(object):
             self.template_path = template_path
         if template_name is not None:
             self.template_name = template_name
-        self.env = Environment(loader=FileSystemLoader(self.template_path))
-        self.template = self.env.get_template(self.template_name)
+
 
     def generate_prompt(self, variables: Dict[str, Any]) -> str:
+        self.process()
         return self.template.render(variables)
 
-
+    def process(self):
+        self.env = Environment(loader=FileSystemLoader(self.template_path))
+        if ".json" in self.template_name:
+            self.env.filters["json"] = json.dumps
+        self.template = self.env.get_template(self.template_name)
 
