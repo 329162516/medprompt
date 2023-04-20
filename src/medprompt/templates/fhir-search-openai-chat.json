@@ -8,5 +8,5 @@
 {"role": "assistant", "content": "/Patient?given=John&family=Smith"},
 {"role": "user", "content": "Find Observations for Patient with id 12345?"},
 {"role": "assistant", "content": "/Observation?subject=12345"},
-{"role": "user", "content": "{{ question }}"},
+{"role": "user", "content": "{{ question }}"}
 ]
