@@ -26,8 +26,11 @@ def f():
 
 
 def test_default(f):
-    assert f.generate_prompt({"question": "a test?"}
-                             ) == "Default prompt with a test?"
+    assert f.generate_prompt({"question": "a test?", "answer": "an answer"}
+                             ) == "Default prompt with a test? for an an answer."
+
+def test_get_template_variables(f):
+    assert f.get_template_variables() == set(["question", "answer"])
 
 def test_fhir_template(f):
     f.set_template(

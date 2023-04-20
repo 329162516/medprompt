@@ -53,4 +53,9 @@ class MedPrompter(object):
         if ".json" in self.template_name:
             self.env.filters["json"] = json.dumps
         self.template = self.env.get_template(self.template_name)
+        return self.env.loader.get_source(self.env, self.template_name)
 
+    def get_template_variables(self) -> List[str]:
+        template_source = self.process()
+        ast = self.env.parse(template_source)
+        return meta.find_undeclared_variables(ast)
