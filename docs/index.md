@@ -25,6 +25,7 @@ License <license>
 Authors <authors>
 Changelog <changelog>
 Module Reference <api/modules>
+Template Reference <templates>
 ```
 
 ## Indices and tables
