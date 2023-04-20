@@ -13,7 +13,6 @@ class MedPrompter(object):
             self.template_path = resource_filename(__name__, "templates")
         else:
             self.template_path = template_path
-        print(f"template_path: {self.template_path}")
         self.template_name = template_name
         self.env = Environment(loader=FileSystemLoader(self.template_path))
         self.template = self.env.get_template(self.template_name)
