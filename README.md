@@ -11,7 +11,12 @@ Prompt engineering is the process of designing and constructing effective prompt
 MEDPrompt's philosophy is that application logic shouldn’t make the prompt engineer's job difficult. We use [Jinja](https://jinja.palletsprojects.com/en/3.1.x/) as a template engine.
 
 ## Usage
-WIP
+
+### Install
+
+```
+pip install git+https://github.com/dermatologist/medprompt.git
+```
 
 ## Give us a star ⭐️
 If you find this project useful, give us a star. It helps others discover the project.
