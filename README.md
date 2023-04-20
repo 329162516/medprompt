@@ -26,6 +26,8 @@ prompt = MedPrompter()
 prompt.set_template(
     template_name="fhir-search-openai-chat.json")
 
+print(prompt.get_template_variables())
+
 messages = prompt.generate_prompt(
     {"question": "Find Conditions for patient with first name John?"})
 ```
@@ -33,7 +35,13 @@ messages = prompt.generate_prompt(
 ## Give us a star ⭐️
 If you find this project useful, give us a star. It helps others discover the project.
 
-## Contributors
+## Contributing
+* PR welcome
+* Add templates in [this folder](src/medprompt/templates/) as [jinja2](https://jinja.palletsprojects.com/en/3.1.x/) or JSON.
+* Follow the naming conventions in the folder.
+* Add documentations [here](info/) as a markdown file with the same name.
+* Add a link in the [index.md file](info/index.md).
+* Please see [CONTRIBUTING.md](/CONTRIBUTING.md)
 
+## Contributers
 * [Bell Eapen](https://nuchange.ca) | [![Twitter Follow](https://img.shields.io/twitter/follow/beapen?style=social)](https://twitter.com/beapen)
-* PR welcome, please see [CONTRIBUTING.md](/CONTRIBUTING.md)

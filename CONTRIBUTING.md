@@ -7,6 +7,12 @@
 * Use *GitHub Issues* for feature requests and bug reports. Include as much information as possible while reporting bugs.
 
 
+## General instructions
+* Add templates in [this folder](src/medprompt/templates/) as [jinja2](https://jinja.palletsprojects.com/en/3.1.x/) or JSON.
+* Follow the naming conventions in the folder.
+* Add documentations [here](info/) as a markdown file with the same name.
+* Add a link in the [index.md file](info/index.md).
+
 ## Contributing (Step-by-step)
 
 1. [Fork the repo](http://help.github.com/fork-a-repo) and clone it to your local computer, and set up the upstream remote:
