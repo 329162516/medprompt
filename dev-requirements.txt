@@ -28,8 +28,6 @@ docutils==0.19
     # via
     #   recommonmark
     #   sphinx
-exceptiongroup==1.1.1
-    # via pytest
 filelock==3.12.0
     # via
     #   tox
@@ -37,8 +35,6 @@ filelock==3.12.0
 idna==3.4
     # via requests
 imagesize==1.4.1
-    # via sphinx
-importlib-metadata==6.5.0
     # via sphinx
 iniconfig==2.0.0
     # via pytest
@@ -75,13 +71,11 @@ pytest==7.3.1
     #   pytest-cov
 pytest-cov==4.0.0
     # via -r dev-requirements.in
-pytz==2023.3
-    # via babel
 pyyaml==6.0
     # via responses
 recommonmark==0.7.1
     # via -r dev-requirements.in
-requests==2.28.2
+requests==2.31.0
     # via
     #   responses
     #   sphinx
@@ -107,13 +101,6 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-tomli==2.0.1
-    # via
-    #   coverage
-    #   pyproject-api
-    #   pytest
-    #   setuptools-scm
-    #   tox
 tox==4.4.12
     # via -r dev-requirements.in
 types-pyyaml==6.0.12.9
@@ -128,8 +115,6 @@ virtualenv==20.22.0
     # via tox
 wheel==0.40.0
     # via -r dev-requirements.in
-zipp==3.15.0
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
