@@ -1,5 +1,7 @@
 
 import json
+from src.medprompt import *
+
 def test_fhir_observation_v1(f):
     fhir_obs = '''
 {
@@ -71,5 +73,8 @@ def test_fhir_observation_v1(f):
 '''
     f.set_template(
         template_name="observation_v1.jinja")
-    prompt = f.generate_prompt(json.loads(fhir_obs))
-    print(prompt)
+    input_object = json.loads(fhir_obs)
+    input_object["time_diff"] = get_time_diff_from_today
+    prompt = f.generate_prompt(input_object)
+    print (prompt)
+    assert prompt is not None

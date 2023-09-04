@@ -1,6 +1,7 @@
-The {{ code.coding[0].display }} on {{ effectiveDateTime }} was
-{% if valueQuantity.value %}
-{% if valueQuantity is defined %}
+
+The {{ code.coding[0].display }} before {{ time_diff(effectiveDateTime)}} days was
+{% if valueQuantity.value +%}
+{% if valueQuantity is defined +%}
 {{ valueQuantity.value }} {{ valueQuantity.unit }}
 {% elif valueString is defined%}
 {{ valueString }}
