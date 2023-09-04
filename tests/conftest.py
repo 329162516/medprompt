@@ -7,4 +7,11 @@
     - https://docs.pytest.org/en/stable/writing_plugins.html
 """
 
-# import pytest
+import pytest
+
+
+@pytest.fixture
+def f():
+    from src.medprompt import MedPrompter
+    _m = MedPrompter()
+    return _m
