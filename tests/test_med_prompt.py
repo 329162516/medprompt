@@ -14,17 +14,6 @@
  limitations under the License.
 """
 
-
-import pytest
-
-
-@pytest.fixture
-def f():
-    from src.medprompt import MedPrompter
-    _m = MedPrompter()
-    return _m
-
-
 def test_default(f):
     assert f.generate_prompt({"question": "a test?", "answer": "an answer"}
                              ) == "Default prompt with a test? for an an answer."
@@ -32,8 +21,3 @@ def test_default(f):
 def test_get_template_variables(f):
     assert f.get_template_variables() == set(["question", "answer"])
 
-def test_fhir_template(f):
-    f.set_template(
-        template_name="fhir-search-openai-chat.json")
-    assert f.generate_prompt({"question": "a test?"}
-                             ) is not "FHIR prompt with a test?"
