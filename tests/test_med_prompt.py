@@ -14,10 +14,6 @@
  limitations under the License.
 """
 
-
-import pytest
-
-
 def test_default(f):
     assert f.generate_prompt({"question": "a test?", "answer": "an answer"}
                              ) == "Default prompt with a test? for an an answer."

@@ -9,7 +9,6 @@
 
 import pytest
 
-
 @pytest.fixture
 def f():
     from src.medprompt import MedPrompter

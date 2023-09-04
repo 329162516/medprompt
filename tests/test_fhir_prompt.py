@@ -15,9 +15,6 @@
 """
 
 
-import pytest
-
-
 def test_fhir_template(f):
     f.set_template(
         template_name="fhir-search-openai-chat.json")
