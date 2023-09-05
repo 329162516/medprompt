@@ -5,10 +5,16 @@
 ![Prompt Engineering](images/medprompt.jpg)
 
 ## About
-Prompt engineering is the process of designing and constructing effective prompts for LLMs. The goal of prompt engineering is to provide the LLM with the necessary information and context to generate accurate and relevant responses. **MEDPrompt** is a user-contributed collection of prompts for medical applications.
+Prompt engineering is the process of designing and constructing effective prompts for LLMs. The goal of prompt engineering is to provide the LLM with the necessary information and context to generate accurate and relevant responses. **MEDPrompt** is a user-contributed collection of prompts for medical applications. WIP, User contributions are highly appreciated!
 
 ### FHIR Flattening Templates
-This repository includes templates for flattening FHIR resources into a text representation that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. [See this example usage](/tests/test_fhir_observation_v1.py).
+This repository includes templates for converting FHIR resources into a text representation that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. [See this example usage](/tests/test_fhir_observation_v1.py). Below is the logical architecture for an end-to-end system using these templates :fhir_engine: (Work in progress).
+
+[![FHIR Engine](https://github.com/dermatologist/medprompt/blob/develop/notes/fhirqa.drawio.svg)](https://github.com/dermatologist/medprompt/blob/develop/notes/fhirqa.drawio.svg)
+
+:sparkles: Checkout [FHIRy](https://github.com/dermatologist/fhiry) for FHIR -> pandas df mapping!
+
+
 
 ## Design
 MEDPrompt's philosophy is that application logic shouldn’t make the prompt engineer's job difficult. We use [Jinja](https://jinja.palletsprojects.com/en/3.1.x/) as a template engine.
