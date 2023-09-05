@@ -1,14 +1,10 @@
-# MEDPrompt
-
-## Collection of healthcare-inspired prompts for Large Language Models (LLMs)
-
-![Prompt Engineering](images/medprompt.jpg)
+# MEDPrompt : Collection of healthcare-inspired prompts for Large Language Models (LLMs) ✍️
 
 ## About
 Prompt engineering is the process of designing and constructing effective prompts for LLMs. The goal of prompt engineering is to provide the LLM with the necessary information and context to generate accurate and relevant responses. **MEDPrompt** is a user-contributed collection of prompts for medical applications. WIP, User contributions are highly appreciated!
 
 ### FHIR Flattening Templates
-This repository includes templates for converting FHIR resources into a text representation that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. [See this example usage](/tests/test_fhir_observation_v1.py). Below is the logical architecture for an end-to-end system using these templates :fhir_engine: (Work in progress).
+This repository includes templates for converting FHIR resources into a text representation that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. [See this example usage](/tests/test_fhir_observation_v1.py). Below is the logical architecture for an end-to-end system using these templates 🚒 (Work in progress).
 
 [![FHIR Engine](https://github.com/dermatologist/medprompt/blob/develop/notes/fhirqa.drawio.svg)](https://github.com/dermatologist/medprompt/blob/develop/notes/fhirqa.drawio.svg)
 
