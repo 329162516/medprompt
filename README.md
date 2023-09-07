@@ -11,7 +11,7 @@ This repository includes templates for converting FHIR resources into a text rep
 :sparkles: Checkout [FHIRy](https://github.com/dermatologist/fhiry) for FHIR -> pandas df mapping!
 
 
-## [LIST OF TEMPLATES](/docs/prompts.md)
+## [LIST OF TEMPLATES](/info/index.md)
 
 ## Design
 MEDPrompt's philosophy is that application logic shouldn’t make the prompt engineer's job difficult. We use [Jinja](https://jinja.palletsprojects.com/en/3.1.x/) as a template engine.
