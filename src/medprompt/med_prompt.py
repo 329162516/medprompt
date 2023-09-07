@@ -44,8 +44,11 @@ class MedPrompter(object):
             self.template_name = template_name
 
 
-    def generate_prompt(self, variables: Dict[str, Any]) -> str:
+    def generate_prompt(self, variables: Dict[str, Any] = {}) -> str:
         self.process()
+        if variables == {}:
+            with open(self.template_path + "/" + self.template_name) as f:
+                return f.read()
         return self.template.render(variables)
 
     def process(self):

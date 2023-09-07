@@ -17,7 +17,7 @@
 
 def test_fhir_template(f):
     f.set_template(
-        template_name="fhir-search-openai-chat.json")
+        template_name="fhir_search_oai_chat_v1.json")
     prompt = f.generate_prompt({"question": "a test?"})
     output = '''[
 {"role": "system", "content": "You are an AI assistant that writes FHIR search queries."},
