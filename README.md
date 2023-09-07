@@ -3,7 +3,7 @@
 ## About
 Prompt engineering is the process of designing and constructing effective prompts for LLMs. The goal of prompt engineering is to provide the LLM with the necessary information and context to generate accurate and relevant responses. **MEDPrompt** is a user-contributed collection of prompts and [Guardrails](https://docs.getguardrails.ai/) for medical applications. WIP, User contributions are highly appreciated!
 
-### FHIR Flattening Templates
+### FHIR2Text -> Convert FHIR resources to plain text
 This repository includes templates for converting FHIR resources into a text representation that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. [See this example usage](/tests/test_fhir_observation_v1.py). Below is the logical architecture for an end-to-end system using these templates 🚒 (Work in progress).
 
 [![FHIR Engine](https://github.com/dermatologist/medprompt/blob/develop/notes/fhirqa.drawio.svg)](https://github.com/dermatologist/medprompt/blob/develop/notes/fhirqa.drawio.svg)
@@ -30,12 +30,14 @@ pip install git+https://github.com/dermatologist/medprompt.git
 from medprompt import MedPrompter
 prompt = MedPrompter()
 prompt.set_template(
-    template_name="fhir-search-openai-chat.json")
+    template_name="fhir_search_oai_chat_v1.json")
 
 print(prompt.get_template_variables())
 
 messages = prompt.generate_prompt(
     {"question": "Find Conditions for patient with first name John?"})
+
+print(messages)
 ```
 
 ## Give us a star ⭐️
