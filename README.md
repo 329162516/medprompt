@@ -18,6 +18,8 @@ MEDPrompt's philosophy is that application logic shouldn’t make the prompt eng
 
 ## Usage
 
+* See [Examples folder](/examples/fhirToText.ipynb)
+
 ### Install
 
 ```
