@@ -20,6 +20,7 @@ Healthcare inspared LLM prompts
 :maxdepth: 2
 
 Overview <readme>
+List of Prompts <prompts>
 Contributions & Help <contributing>
 License <license>
 Authors <authors>
