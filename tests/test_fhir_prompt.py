@@ -31,4 +31,4 @@ def test_fhir_template(f):
 {"role": "assistant", "content": "/Observation?subject=12345"},
 {"role": "user", "content": "a test?"}
 ]'''
-    assert prompt == output
+    assert prompt == output.replace("\n", " ")

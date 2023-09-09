@@ -16,6 +16,7 @@
 
 
 
+import re
 from typing import Any, Dict, List, Optional
 import json
 from jinja2 import Environment, FileSystemLoader, meta
@@ -50,7 +51,7 @@ class MedPrompter(object):
             with open(self.template_path + "/" + self.template_name) as f:
                 return f.read()
         prompt = self.template.render(variables)
-        prompt = prompt.replace("\n\n", " ")
+        prompt = re.sub(r'\n+', ' ', prompt).strip()
         return prompt
 
     def process(self):
