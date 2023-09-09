@@ -1,10 +1,11 @@
 
 The {{ code.coding[0].display }} before {{ time_diff(effectiveDateTime)}} days was
 {% if interpretation is defined %}
-{{ interpretation[0].coding[0].display }}.
+{{ interpretation[0].coding[0].display }}
 {% endif %}
-{% if valueQuantity.value +%}
-{% if valueQuantity is defined +%}
+{% if valueQuantity.value %}
+with value
+{% if valueQuantity is defined %}
 {{ valueQuantity.value }} {{ valueQuantity.unit }}
 {% elif valueString is defined%}
 {{ valueString }}
@@ -27,4 +28,4 @@ The {{ code.coding[0].display }} before {{ time_diff(effectiveDateTime)}} days w
 {% endif %}
 {% else %}
 {{ valueBoolean }}
-{% endif %}
+{% endif %}.

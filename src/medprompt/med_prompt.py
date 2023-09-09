@@ -49,7 +49,9 @@ class MedPrompter(object):
         if variables == {}:
             with open(self.template_path + "/" + self.template_name) as f:
                 return f.read()
-        return self.template.render(variables)
+        prompt = self.template.render(variables)
+        prompt = prompt.replace("\n\n", " ")
+        return prompt
 
     def process(self):
         self.env = Environment(loader=FileSystemLoader(self.template_path))
