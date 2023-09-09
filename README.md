@@ -19,8 +19,8 @@ MEDPrompt's philosophy is that application logic shouldn’t make the prompt eng
 ## Usage
 
 ## See [Examples folder](/examples)
-    * [Observation](/examples/fhirToText.ipynb)
-    * [FHIR Bundle](/examples/fhirBundle.ipynb)
+1. [Observation](/examples/fhirToText.ipynb)
+2. [FHIR Bundle](/examples/fhirBundle.ipynb)
 
 ### Install
 
