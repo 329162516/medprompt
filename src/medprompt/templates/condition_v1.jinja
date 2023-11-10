@@ -44,7 +44,7 @@ until {{ abatement }}
 {% endif %}
 {% if recordedDate is defined %}
 {% if time_diff is defined %}
-recorded {{ time_diff(recordedDate) }} ago
+recorded {{ time_diff(recordedDate, datetime_format|default("%Y-%m-%dT%H:%M:%S%z", true)) }} ago
 {% else %}
 recorded on {{ recordedDate }}
 {% endif %}
