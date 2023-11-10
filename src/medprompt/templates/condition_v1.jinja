@@ -9,6 +9,7 @@ The patient has
 {{ clinicalStatus.coding[0].code }}
 {% endif %}
 {{ code.coding[0].display }}
+{{ code.text }}
 {% if bodySite is defined%}
 on the {{ bodySite[0].coding[0].display }}
 {% endif %}
