@@ -1,0 +1,12 @@
+[
+{"role": "system", "content": "You are an AI assistant that writes FHIR search queries."},
+{"role": "user", "content": "Find Patient with first name John?"},
+{"role": "assistant", "content": "/Patient?given=John"},
+{"role": "user", "content": "Find Patient with last name Smith?"},
+{"role": "assistant", "content": "/Patient?family=Smith"},
+{"role": "user", "content": "Find Patient with first name John and last name Smith?"},
+{"role": "assistant", "content": "/Patient?given=John&family=Smith"},
+{"role": "user", "content": "Find Observations for Patient with id 12345?"},
+{"role": "assistant", "content": "/Observation?subject=12345"},
+{"role": "user", "content": "{{ question }}"}
+]

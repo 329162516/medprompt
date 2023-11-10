@@ -1,0 +1,33 @@
+
+The {{ code.coding[0].display }}
+{% if time_diff is defined  %}
+before {{ time_diff(effectiveDateTime)}} days was
+{% endif %}
+{% if interpretation is defined %}
+{{ interpretation[0].coding[0].display }} with value
+{% endif %}
+{% if valueQuantity is defined %}
+{% if valueQuantity.value %}
+{{ valueQuantity.value }} {{ valueQuantity.unit }}
+{% elif valueString is defined%}
+{{ valueString }}
+{% elif valueCodeableConcept is defined %}
+{{ valueCodeableConcept.text }}
+{% elif valueRange is defined %}
+{{ valueRange.low.value }} {{ valueRange.low.unit }} to {{ valueRange.high.value }} {{ valueRange.high.unit }}
+{% elif valueRatio is defined %}
+{{ valueRatio.numerator.value }} {{ valueRatio.numerator.unit }} to {{ valueRatio.denominator.value }} {{ valueRatio.denominator.unit }}
+{% elif valueSampledData is defined %}
+{{ valueSampledData.origin.value }} {{ valueSampledData.origin.unit }} to {{ valueSampledData.period.value }} {{ valueSampledData.period.unit }}
+{% elif valueAttachment is defined %}
+{{ valueAttachment.title }}
+{% elif valueTime is defined %}
+{{ valueTime }}
+{% elif valueDateTime is defined %}
+{{ valueDateTime }}
+{% elif valuePeriod is defined %}
+{{ valuePeriod.start }} to {{ valuePeriod.end }}
+{% endif %}
+{% else %}
+{{ valueBoolean }}
+{% endif %}

@@ -1,0 +1,51 @@
+The patient has
+{% if severity is defined %}
+{{ severity.coding[0].display }}
+{% endif %}
+{% if verificationStatus is defined %}
+{{ verificationStatus.coding[0].code }}
+{% endif %}
+{% if clinicalStatus is defined %}
+{{ clinicalStatus.coding[0].code }}
+{% endif %}
+{{ code.coding[0].display }}
+{% if bodySite is defined%}
+on the {{ bodySite[0].coding[0].display }}
+{% endif %}
+{% if laterality is defined %}
+{{ laterality.coding[0].display }}
+{% endif %}
+{% if onsetAge is defined %}
+since the age of {{ onsetAge.value }} {{ onsetAge.unit }}
+{% endif %}
+{% if onsetPeriod is defined %}
+since {{ onsetPeriod.start }} until {{ onsetPeriod.end }}
+{% endif %}
+{% if onsetRange is defined %}
+since {{ onsetRange.low }} until {{ onsetRange.high }}
+{% endif %}
+{% if onsetString is defined %}
+since {{ onsetString }}
+{% endif %}
+{% if abatementAge is defined %}
+until the age of {{ abatementAge.value }} {{ abatementAge.unit }}
+{% endif %}
+{% if abatementPeriod is defined %}
+until {{ abatementPeriod.start }} until {{ abatementPeriod.end }}
+{% endif %}
+{% if abatementRange is defined %}
+until {{ abatementRange.low }} until {{ abatementRange.high }}
+{% endif %}
+{% if abatementString is defined %}
+until {{ abatementString }}
+{% endif %}
+{% if abatement is defined %}
+until {{ abatement }}
+{% endif %}
+{% if recordedDate is defined %}
+{% if time_diff is defined %}
+recorded {{ time_diff(recordedDate) }} ago
+{% else %}
+recorded on {{ recordedDate }}
+{% endif %}
+{% endif %}

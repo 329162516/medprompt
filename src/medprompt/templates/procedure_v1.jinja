@@ -1,0 +1,19 @@
+{% if code.coding[0].display  is defined%}
+{{ code.coding[0].display }}
+was performed
+{% if time_diff is defined %}
+ {{ time_diff(performedDateTime)}} days ago
+{% endif %}
+{% if performer is defined%}
+ by {{ performer[0].actor.display }}
+{% endif %}
+{% if reasonCode is defined %}
+ for {{ reasonCode[0].text }}.
+{% endif %}
+{% if bodySite is defined%}
+    on {{ bodySite[0].coding[0].display }}.
+{% endif %}
+{% if note is defined%}
+Additional notes: {{ note[0].text }}
+{% endif %}
+{% endif %}

@@ -1,0 +1,37 @@
+<rail version="0.1">
+<output>
+    <object name="fhir_query" format="length: 1">
+        <string
+            name="query"
+            description="A single fhir query string."
+            format="one-line"
+            on-fail-length="reask"
+        />
+    </object>
+</output>
+
+<prompt>
+You are an AI assistant that writes FHIR search queries.
+
+Below are examples for the expected query format:
+
+Question: Find Patient with first name John?
+query: Patient?given=John
+Question: Find all Potassium tests (LOINC code 6298-4) across all patients
+query: Observation?code=http://loinc.org|6298-4
+Question: Find all patients with diabetes?
+query: Condition?code:text=diabetes&amp;_include=Condition:patient
+Question: Find Observations for Patient with id 12345?
+query: Observation?subject=12345
+Question: Count all patients with hepatitis?
+query: Condition?code:text=hepatitis&amp;_include=Condition:patient&amp;_summary=count
+
+
+{{question}}
+@xml_prefix_prompt
+
+{output_schema}
+
+@json_suffix_prompt_v2_wo_none
+</prompt>
+</rail>

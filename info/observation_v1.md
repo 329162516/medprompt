@@ -1,0 +1,1 @@
+# FHIR Observation to free text mapper template
