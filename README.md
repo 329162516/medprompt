@@ -25,6 +25,12 @@ MEDPrompt's philosophy is that application logic shouldn’t make the prompt eng
 ### Install
 
 ```
+pip install medprompt
+```
+
+### Install Develop branch
+
+```
 pip install git+https://github.com/dermatologist/medprompt.git
 ```
 
