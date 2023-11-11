@@ -1,10 +1,11 @@
-# MEDPrompt : Collection of healthcare-inspired prompts for Large Language Models (LLMs) ✍️
+# MEDPrompt 
+## Medical prompts for Large Language Models (LLMs) ✍️
 ![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/pypi/medprompt)
 [![PyPI download total](https://img.shields.io/pypi/dm/medprompt.svg)](https://pypi.python.org/pypi/medprompt/)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/dermatologist/medprompt)
 
 ## About
-Prompt engineering is the process of designing and constructing effective prompts for LLMs. The goal of prompt engineering is to provide the LLM with the necessary information and context to generate accurate and relevant responses. **MEDPrompt** is a user-contributed collection of prompts and [Guardrails](https://docs.getguardrails.ai/) for medical applications. WIP, User contributions are highly appreciated!
+Prompt engineering is the process of designing and constructing effective prompts for LLMs. The goal of prompt engineering is to provide the LLM with the necessary information and context to generate accurate and relevant responses. **MEDPrompt** is a user-contributed collection of prompts and [Guardrails](https://docs.getguardrails.ai/) for medical applications. MEDPrompt also includes a collection of templates for using FHIR in LLM prompts (see below). WIP, User contributions are highly appreciated!
 
 ### FHIR2Text -> Convert FHIR resources to plain text
 This repository includes templates for converting **FHIR resources into a text representation** that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. You can create **joint embeddings from structured and unstructured data** from FHIR resources!  🚒[**See this example usage**](/tests/test_fhir_observation_v1.py). 
