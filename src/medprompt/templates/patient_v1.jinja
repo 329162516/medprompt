@@ -1,0 +1,13 @@
+Medical record of a
+{% if gender is defined %}
+{{ gender }}
+{% endif %}
+patient
+{% if birthDate is defined %}
+{% if time_diff is defined %}
+ aged {{ time_diff(birthDate, datetime_format|default("%Y-%m-%d", true), return_type|default("years", true)) }}
+{% else %}
+born on {{ birthDate }}
+{% endif %}
+{% endif %}
+.
