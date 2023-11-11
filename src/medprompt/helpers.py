@@ -1,25 +1,38 @@
 from datetime import datetime, timedelta, timezone
 
 
-def get_time_diff_from_today(timestamp, datetime_format="%Y-%m-%dT%H:%M:%S%z", return_type="auto"):
+def get_time_diff_from_today(timestamp, datetime_format="%Y-%m-%dT%H:%M:%S%z", return_type="days"):
     """Return the difference between the given timestamp and today's date."""
     if len(timestamp) < 12:
         timestamp += "T01:01:01+01:00"  #"2013-04-02T09:30:10+01:00"
     datetime_object = datetime.strptime(timestamp, datetime_format)
     datetime_object = datetime_object.replace(tzinfo=timezone.utc)
     if return_type == "seconds":
-        return (datetime.now(timezone.utc) - datetime_object).seconds
+        _return = (datetime.now(timezone.utc) - datetime_object).seconds
+        _return_type = "seconds"
     elif return_type == "minutes":
-        return (datetime.now(timezone.utc) - datetime_object).seconds / 60
+        _return = (datetime.now(timezone.utc) - datetime_object).seconds / 60
+        _return_type = "minutes"
     elif return_type == "hours":
-        return (datetime.now(timezone.utc) - datetime_object).seconds / 3600
+        _return = (datetime.now(timezone.utc) - datetime_object).seconds / 3600
+        _return_type = "hours"
     elif return_type == "days":
-        return int((datetime.now(timezone.utc) - datetime_object).days)
+        _return = int((datetime.now(timezone.utc) - datetime_object).days)
+        _return_type = "days"
     elif return_type == "weeks":
-        return int((datetime.now(timezone.utc) - datetime_object).days / 7)
+        _return = int((datetime.now(timezone.utc) - datetime_object).days / 7)
+        _return_type = "weeks"
     elif return_type == "months":
-        return int((datetime.now(timezone.utc) - datetime_object).days / 30)
+        _return = int((datetime.now(timezone.utc) - datetime_object).days / 30)
+        _return_type = "months"
     elif return_type == "years":
-        return int((datetime.now(timezone.utc) - datetime_object).days / 365)
+        _return = int((datetime.now(timezone.utc) - datetime_object).days / 365)
+        _return_type = "years"
+    elif return_type == "auto":
+        _return = None
+        _return_type = None
     else:
-        return int((datetime.now(timezone.utc) - datetime_object).days)
+        _return = int((datetime.now(timezone.utc) - datetime_object).days)
+        _return_type = "days"
+
+    return str(_return) + " " + _return_type
