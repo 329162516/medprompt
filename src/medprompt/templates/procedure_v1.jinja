@@ -2,7 +2,7 @@
 {{ code.coding[0].display }}
 was performed
 {% if time_diff is defined %}
- {{ time_diff(performedDateTime, datetime_format|default("%Y-%m-%dT%H:%M:%S%z", true))}} days ago
+ {{ time_diff(performedDateTime, datetime_format|default("%Y-%m-%dT%H:%M:%S%z", true))}} ago
 {% endif %}
 {% if performer is defined%}
  by {{ performer[0].actor.display }}

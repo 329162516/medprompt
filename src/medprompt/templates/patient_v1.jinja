@@ -5,7 +5,7 @@ Medical record of a
 patient
 {% if birthDate is defined %}
 {% if time_diff is defined %}
- aged {{ time_diff(birthDate, datetime_format|default("%Y-%m-%d", true), return_type|default("years", true)) }} years
+ aged {{ time_diff(birthDate, datetime_format|default("%Y-%m-%d", true), return_type|default("years", true)) }}
 {% else %}
 born on {{ birthDate }}
 {% endif %}
