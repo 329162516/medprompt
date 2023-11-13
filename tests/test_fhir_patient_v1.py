@@ -170,7 +170,7 @@ def test_fhir_condition_v1(f):
         template_name="patient_v1.jinja")
     input_object = json.loads(fhir_obs)
     input_object["time_diff"] = get_time_diff_from_today
-    input_object["datetime_format"] = "%Y-%m-%dT%H:%M:%S%z"
+    input_object["datetime_format"] = "%Y-%m-%d"
     prompt = f.generate_prompt(input_object)
     print (prompt)
     assert prompt is not None
