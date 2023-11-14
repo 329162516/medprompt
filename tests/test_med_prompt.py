@@ -21,3 +21,8 @@ def test_default(f):
 def test_get_template_variables(f):
     assert f.get_template_variables() == set(["question", "answer"])
 
+
+def test_summary_prompt(f):
+    f.set_template(
+        template_name="summary_v1.jinja")
+    assert "```This is a simple note.```" in f.generate_prompt({"clinical_note": "This is a simple note."})
