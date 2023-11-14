@@ -1,4 +1,4 @@
-# MEDPrompt 
+# MEDPrompt
 ## Medical prompts for Large Language Models (LLMs) ✍️
 ![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/pypi/medprompt)
 [![PyPI download total](https://img.shields.io/pypi/dm/medprompt.svg)](https://pypi.python.org/pypi/medprompt/)
@@ -8,10 +8,10 @@
 Prompt engineering is the process of designing and constructing effective prompts for LLMs. The goal of prompt engineering is to provide the LLM with the necessary information and context to generate accurate and relevant responses. **MEDPrompt** is a user-contributed collection of prompts and [Guardrails](https://docs.getguardrails.ai/) for medical applications. MEDPrompt also includes a collection of templates for using FHIR in LLM prompts (see below). WIP, User contributions are highly appreciated!
 
 ### FHIR2Text -> Convert FHIR resources to plain text
-This repository includes templates for converting **FHIR resources into a text representation** that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. You can create **joint embeddings from structured and unstructured data** from FHIR resources!  🚒[**See this example usage**](/tests/test_fhir_observation_v1.py). 
+This repository includes templates for converting **FHIR resources into a text representation** that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. You can create **joint embeddings from structured and unstructured data** from FHIR resources!  🚒[**See this example usage**](/tests/test_fhir_observation_v1.py).
 
 ### FHIR2Calculator -> Calculate clinical scores from a FHIR Bundle (*Work in progress*)
-Clinical calculators are tools that help healthcare professionals make medical decisions by providing them with quick and easy access to various medical formulas, scores, and algorithms. Calculations performed by LLMs are not reliable. FHIR2Calculator performs calculations on data fields extracted from a FHIR bundle and outputs the results as plain text that can be injected into LLM prompts. 
+Clinical calculators are tools that help healthcare professionals make medical decisions by providing them with quick and easy access to various medical formulas, scores, and algorithms. Calculations performed by LLMs are not reliable. FHIR2Calculator performs calculations on data fields extracted from a FHIR bundle and outputs the results as plain text that can be injected into LLM prompts.
 
 ### Below is the logical architecture for an end-to-end system using these templates (*Work in progress*).
 
@@ -57,6 +57,8 @@ messages = prompt.generate_prompt(
 
 print(messages)
 ```
+
+## [Documentation](https://dermatologist.github.io/medprompt/)
 
 ## Give us a star ⭐️
 If you find this project useful, give us a star. It helps others discover the project.
