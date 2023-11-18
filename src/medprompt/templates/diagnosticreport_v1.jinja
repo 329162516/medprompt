@@ -1,0 +1,11 @@
+
+The {{ code.coding[0].display }}
+{% if time_diff is defined  %}
+before {{ time_diff(effectiveDateTime, datetime_format|default("%Y-%m-%dT%H:%M:%S%z", true))}} was
+{% else %}
+was
+{% endif %}
+{% if base64_decode is defined %}
+{% if presentedForm is defined %}
+
+{% endif %}
