@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.0](https://github.com/dermatologist/medprompt/tree/0.5.0) (2023-11-19)
+
+[Full Changelog](https://github.com/dermatologist/medprompt/compare/0.4.2...0.5.0)
+
 ## [0.4.2](https://github.com/dermatologist/medprompt/tree/0.4.2) (2023-11-14)
 
 [Full Changelog](https://github.com/dermatologist/medprompt/compare/0.4.1...0.4.2)
