@@ -3,30 +3,19 @@
 Healthcare inspared LLM prompts
 
 
-## Note
-
-> This is the main page of your project's [Sphinx] documentation. It is
-> formatted in [Markdown]. Add additional pages by creating md-files in
-> `docs` or rst-files (formatted in [reStructuredText]) and adding links to
-> them in the `Contents` section below.
->
-> Please check [Sphinx] and [MyST] for more information
-> about how to document your project and how to configure your preferences.
-
-
 ## Contents
 
 ```{toctree}
 :maxdepth: 2
 
 Overview <readme>
-List of Prompts <prompts>
+List of Templates <info/index>
+Usage Instructions <info/instructions>
+Module Reference <api/modules>
 Contributions & Help <contributing>
 License <license>
 Authors <authors>
 Changelog <changelog>
-Module Reference <api/modules>
-Template Reference <templates>
 ```
 
 ## Indices and tables

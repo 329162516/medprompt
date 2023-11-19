@@ -21,10 +21,11 @@ jobs:
         pip install -r requirements.txt -r dev-requirements.txt
     - name: Create docs
       run: |
+        cp -r info/ docs/
         make -C docs/ html
         cp docs/_config.yml docs/_build/html/_config.yml
     - name: Deploy Docs 🚀
-      uses: JamesIves/github-pages-deploy-action@v4.2.5
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages # The branch the action should deploy to.
         folder: docs/_build/html # The folder the action should deploy.

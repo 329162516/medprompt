@@ -19,7 +19,7 @@ Clinical calculators are tools that help healthcare professionals make medical d
 
 :sparkles: Checkout [FHIRy](https://github.com/dermatologist/fhiry) for FHIR -> pandas df mapping!
 
-## [LIST OF TEMPLATES](/info/index.md)
+## [Documentation & List of Templates](https://dermatologist.github.io/medprompt/)
 
 ## Design
 MEDPrompt's philosophy is that application logic shouldn’t make the prompt engineer's job difficult. We use [Jinja](https://jinja.palletsprojects.com/en/3.1.x/) as a template engine.
@@ -57,8 +57,6 @@ messages = prompt.generate_prompt(
 
 print(messages)
 ```
-
-## [Documentation](https://dermatologist.github.io/medprompt/)
 
 ## Give us a star ⭐️
 If you find this project useful, give us a star. It helps others discover the project.
