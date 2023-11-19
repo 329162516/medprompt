@@ -1,0 +1,16 @@
+The patient
+{% if status is defined %}
+{% if status == "active" %}
+is currently on
+{% else %}
+was on
+{% endif %}
+{% endif %}
+{% if medicationCodeableConcept is defined %}
+{{ medicationCodeableConcept.text }}
+{% else %}
+some medication
+{% endif %}
+{% if dosageInstruction[0].text is defined %}
+{{ dosageInstruction[0].text }}
+{% endif %}
