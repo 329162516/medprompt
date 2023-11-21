@@ -2,7 +2,7 @@
 import json
 from src.medprompt import *
 
-def test_fhir_medication_v1(f):
+def test_fhir_medicationrequest_v1(f):
     fhir_obs = '''
 {
     "resourceType": "MedicationRequest",
@@ -63,7 +63,7 @@ def test_fhir_medication_v1(f):
 }
 '''
     f.set_template(
-        template_name="medication_v1.jinja")
+        template_name="medicationrequest_v1.jinja")
     input_object = json.loads(fhir_obs)
     prompt = f.generate_prompt(input_object)
     print (prompt)
