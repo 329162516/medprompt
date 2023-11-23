@@ -1,1 +1,1 @@
-from .find_patient import FhirPatientSearchTool, SearchInput
+from .find_patient import FhirPatientSearchTool
