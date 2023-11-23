@@ -10,3 +10,4 @@ setuptools
 setuptools_scm
 wheel
 tox
+aioresponses
