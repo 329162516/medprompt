@@ -10,10 +10,9 @@ from pydantic import BaseModel, Field
 
 
 class SearchInput(BaseModel):
-    given: str = Field()
-    family: str = Field()
-    birth_date: str = Field()
-
+    given: Optional[str] = Field()
+    family: Optional[str] = Field()
+    birth_date: Optional[str] = Field()
 # Usage: tools =[FhirPatientSearchTool()]
 class FhirPatientSearchTool(BaseTool):
     name = "fhir_search"
