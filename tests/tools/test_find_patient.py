@@ -2,7 +2,7 @@ import os
 import pytest
 from unittest.mock import patch
 from fhir.resources.bundle import Bundle
-from src.medprompt.tools.find_patient import FhirSearchTool, SearchInput
+from src.medprompt.tools import FhirSearchTool, SearchInput
 from aioresponses import aioresponses
 
 @pytest.fixture
