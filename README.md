@@ -13,6 +13,14 @@ This repository includes templates for converting **FHIR resources into a text r
 ### FHIR2Calculator -> Calculate clinical scores from a FHIR Bundle (*Work in progress*)
 Clinical calculators are tools that help healthcare professionals make medical decisions by providing them with quick and easy access to various medical formulas, scores, and algorithms. Calculations performed by LLMs are not reliable. FHIR2Calculator performs calculations on data fields extracted from a FHIR bundle and outputs the results as plain text that can be injected into LLM prompts.
 
+### Tools for LangChain agents
+Tools are functions that Langchain agents can use to carry out tasks based on the tool description.
+Example usage:
+```
+from medprompt.tools import FhirSearchTool
+tools = [FhirSearchTool()]
+```
+
 ### Below is the logical architecture for an end-to-end system using these templates (*Work in progress*).
 
 [![FHIR Engine](https://github.com/dermatologist/medprompt/blob/develop/notes/fhirqa.drawio.svg)](https://github.com/dermatologist/medprompt/blob/develop/notes/fhirqa.drawio.svg)
