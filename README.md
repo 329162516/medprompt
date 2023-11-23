@@ -17,8 +17,8 @@ Clinical calculators are tools that help healthcare professionals make medical d
 Tools are functions that Langchain agents can use to carry out tasks based on the tool description.
 Example usage:
 ```
-from medprompt.tools import FhirSearchTool
-tools = [FhirSearchTool()]
+from medprompt.tools import FhirPatientSearchTool
+tools = [FhirPatientSearchTool()]
 ```
 
 ### Below is the logical architecture for an end-to-end system using these templates (*Work in progress*).

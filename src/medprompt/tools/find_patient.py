@@ -1,21 +1,21 @@
+import os
 from typing import Optional, Type
+
+import requests
+from fhir.resources.bundle import Bundle
+from langchain.callbacks.manager import (AsyncCallbackManagerForToolRun,
+                                         CallbackManagerForToolRun)
 from langchain.tools import BaseTool, StructuredTool, Tool, tool
 from pydantic import BaseModel, Field
-import os
-import requests
-from langchain.callbacks.manager import (
-    AsyncCallbackManagerForToolRun,
-    CallbackManagerForToolRun,
-)
-from fhir.resources.bundle import Bundle
+
 
 class SearchInput(BaseModel):
     given: str = Field()
     family: str = Field()
     birth_date: str = Field()
 
-# Usage: tools =[FhirSearchTool()]
-class FhirSearchTool(BaseTool):
+# Usage: tools =[FhirPatientSearchTool()]
+class FhirPatientSearchTool(BaseTool):
     name = "fhir_search"
     description = """
     Searches FHIR server for a patient with available data from given name, family name, and birth date.
