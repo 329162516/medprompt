@@ -1,13 +1,16 @@
 import os
-import pytest
 from unittest.mock import patch
-from fhir.resources.bundle import Bundle
-from src.medprompt.tools.find_patient import FhirSearchTool, SearchInput
+
+import pytest
 from aioresponses import aioresponses
+from fhir.resources.bundle import Bundle
+
+from src.medprompt.tools import FhirPatientSearchTool, SearchInput
+
 
 @pytest.fixture
 def fhir_search_tool():
-    return FhirSearchTool()
+    return FhirPatientSearchTool()
 
 @pytest.fixture
 def fhir_bundle():
