@@ -57,8 +57,9 @@ exceptiongroup==1.2.0
     # via
     #   -c requirements.txt
     #   pytest
-filelock==3.12.0
+filelock==3.13.1
     # via
+    #   -c requirements.txt
     #   tox
     #   virtualenv
 frozenlist==1.4.0
