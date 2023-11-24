@@ -26,7 +26,7 @@ from langchain.tools import BaseTool
 from langchain.vectorstores import Redis
 from pydantic import BaseModel, Field
 
-from src.medprompt import MedPrompter, get_time_diff_from_today
+from .. import MedPrompter, get_time_diff_from_today
 
 
 class BundleInput(BaseModel):

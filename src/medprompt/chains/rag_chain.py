@@ -34,7 +34,7 @@ def check_index(patient_id):
             raise e
 
 # Usage: tools = [medpromt.chains.get_chain]
-@tool(name="rag_chain", args_schema=Question)
+@tool(args_schema=Question)
 def get_rag_chain(patient_id: str, **kwargs):
     """
     Returns a chain that can be used to answer a question based on a patient's medical record.
