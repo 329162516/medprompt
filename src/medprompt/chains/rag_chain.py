@@ -21,10 +21,10 @@ embedder = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
 # run the ingest.py script to populate this
 
 
-def check_index(index_name):
+def check_index(patient_id):
     try:
         vectorstore = Redis.from_existing_index(
-            embedding=embedder, index_name=index_name, schema=INDEX_SCHEMA, redis_url=REDIS_URL
+            embedding=embedder, index_name=patient_id, schema=INDEX_SCHEMA, redis_url=REDIS_URL
         )
         return vectorstore.as_retriever(search_type="mmr")
     except Exception as e:
@@ -33,17 +33,25 @@ def check_index(index_name):
         else:
             raise e
 
-@tool(name="rag_chain", description="Answers a clinicial question based on a patient's medical record", args_schema=Question)
-def get_chain(index_name, llm=None):
-    retriever = check_index(index_name)
+# Usage: tools = [medpromt.chains.get_chain]
+@tool(name="rag_chain", args_schema=Question)
+def get_rag_chain(patient_id: str, **kwargs):
+    """
+    Returns a chain that can be used to answer a question based on a patient's medical record.
+
+    Args:
+        patient_id (str): The id of the patient to search for.
+        llm (LangModel): The language model to use to answer the question.
+        prompt (ChatPromptTemplate): The prompt to use to ask the question if available.
+        output_parser (OutputParser): The output parser to use to parse the answer if available.
+    """
+    llm = kwargs.get("llm", None)
+    retriever = check_index(patient_id)
     if not retriever:
         raise ValueError("No index found.")
     # Define our prompt
     template = """
-    Use the following pieces of context from Nike's financial 10k filings
-    dataset to answer the question. Do not make up an answer if there is no
-    context provided to help answer it. Include the 'source' and 'start_index'
-    from the metadata included in the context you used to answer the question
+    TBD
 
     Context:
     ---------
@@ -56,7 +64,9 @@ def get_chain(index_name, llm=None):
     Answer:
     """
 
-    prompt = ChatPromptTemplate.from_template(template)
+    _prompt = ChatPromptTemplate.from_template(template)
+    prompt = kwargs.get("prompt", _prompt)
+    output_parser = kwargs.get("output_parser", StrOutputParser())
 
     if not llm:
         raise ValueError("No language model provided.")
@@ -66,6 +76,6 @@ def get_chain(index_name, llm=None):
         RunnableParallel({"context": retriever, "question": RunnablePassthrough()})
         | prompt
         | llm
-        | StrOutputParser()
+        | output_parser
     ).with_types(input_type=Question)
     return chain
