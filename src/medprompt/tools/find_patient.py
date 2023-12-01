@@ -66,12 +66,15 @@ class FhirPatientSearchTool(StructuredTool):
             if birth_date:
                 params["birthdate"] = birth_date
         _response = self._call_fhir_server(url, params)
-        if _response["total"] == 0:
-            return "No patient found"
-        elif _response["total"] == 1:
-            return "The patient id is {}".format(_response["entry"][0]["resource"]["id"])
-        else:
-            return "There are multiple patients with this name. Please try again with more details like a birth date."
+        try:
+            if _response["total"] == 0:
+                return "No patient found"
+            elif _response["total"] == 1:
+                return "The patient id is {}".format(_response["entry"][0]["resource"]["id"])
+            else:
+                return "There are multiple patients with this name. Please try again with more details like a birth date."
+        except:
+            return "The server did not send a valid response. Please try again later."
     async def _arun(
             self,
             given: str = None,
