@@ -1,10 +1,9 @@
 import os
+from typing import Any
 from unittest.mock import patch
 
 import pytest
 from aioresponses import aioresponses
-from fhir.resources.bundle import Bundle
-
 from src.medprompt.tools import FhirPatientSearchTool
 
 
@@ -28,8 +27,8 @@ def test_run(mock_get, fhir_search_tool, fhir_bundle):
     mock_get.return_value.text = fhir_bundle
     os.environ["FHIR_SERVER_URL"] = "http://hapi.fhir.org"
     result = fhir_search_tool._run(given="John", family="Doe", birth_date="2000-01-01")
-    assert isinstance(result, Bundle)
-    assert result.resource_type == "Bundle"
+    print(result)
+    assert result['resourceType'] == "Bundle"
 
 # @pytest.mark.asyncio
 # async def test_arun(fhir_search_tool, fhir_bundle):

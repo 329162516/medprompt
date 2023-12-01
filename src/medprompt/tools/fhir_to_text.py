@@ -15,49 +15,64 @@
 """
 
 
-from typing import Optional, Type
+from typing import Any, Optional, Type
 
-from fhir.resources.bundle import Bundle
 from langchain.callbacks.manager import (AsyncCallbackManagerForToolRun,
                                          CallbackManagerForToolRun)
 from langchain.tools import BaseTool
-from pydantic import BaseModel, Field
+from langchain.pydantic_v1 import BaseModel, Field
 
 from .. import MedPrompter, get_time_diff_from_today
+from .get_medical_record import GetMedicalRecordTool
 
-
-class BundleInput(BaseModel):
-    bundle_input: Bundle = Field()
+class SearchInput(BaseModel):
+    patient_id: str = Field()
 
 class ConvertFhirToTextTool(BaseTool):
     """
-    Converts a FHIR Bundle resource to a text string.
+    Creats a text representation of medical records for a given patient.
     """
     name = "fhir_to_text"
     description = """
-    Converts a FHIR Bundle resource to a text string.
+    Creats a text representation of medical records for a given patient with patient_id
     """
-    args_schema: Type[BaseModel] = BundleInput
+    args_schema: Type[BaseModel] = SearchInput
 
     def _run(
             self,
-            bundle_input: Bundle = None,
+            patient_id: str = None,
             run_manager: Optional[CallbackManagerForToolRun] = None
-            ) -> Bundle:
+            ) -> str:
         prompt = MedPrompter()
-        output = ""
-        for entry in bundle_input.entry:
-            resource = entry.resource
-            if resource.resource_type == "Patient" or resource.resource_type == "AllergyIntolerance" \
-                or resource.resource_type == "Condition" or resource.resource_type == "Procedure" \
-                or resource.resource_type == "MedicationRequest":
-                obj: dict = resource.dict()
-                obj["time_diff"] = get_time_diff_from_today
-                output += prompt.generate_prompt(obj).replace("\n", " ")
-        return output
+        # Get the patient's medical record
+        get_medical_record_tool = GetMedicalRecordTool()
+        bundle_input = get_medical_record_tool.run(patient_id)
+        return self._process_entries(prompt, bundle_input, patient_id)
     async def _arun(
             self,
-            bundle_input: Bundle = None,
+            patient_id: str = None,
             run_manager: Optional[AsyncCallbackManagerForToolRun] = None
-            ) -> Bundle:
-        raise NotImplementedError("Async not implemented yet")
+            ) -> Any:
+        prompt = MedPrompter()
+        # Get the patient's medical record
+        get_medical_record_tool = GetMedicalRecordTool()
+        bundle_input = await get_medical_record_tool.arun(patient_id)
+        return self._process_entries(prompt, bundle_input, patient_id)
+
+    #* Override if required
+    def _process_entries(self, prompt, bundle, patient_id):
+        output = ""
+        try:
+            entries = bundle["entry"]
+        except TypeError:
+            return "No Data found for patient with id: " + patient_id
+        for entry in entries:
+            resource = entry["resource"]
+            if resource["resourceType"] == "Patient" or resource["resourceType"] == "AllergyIntolerance" \
+                or resource["resourceType"] == "Condition" or resource["resourceType"] == "Procedure" \
+                or resource["resourceType"] == "MedicationRequest":
+                resource["time_diff"] = get_time_diff_from_today
+                template_name = resource['resourceType'].lower() + "_v1.jinja"
+                prompt.set_template(template_name=template_name)
+                output += prompt.generate_prompt(resource).replace("\n", " ")
+        return  "The patient's medical record is: " + output

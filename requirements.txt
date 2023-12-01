@@ -4,12 +4,16 @@
 #
 #    pip-compile
 #
-aiohttp==3.9.0
+aiohttp==3.9.1
     # via langchain
 aiosignal==1.3.1
     # via aiohttp
+annotated-types==0.6.0
+    # via pydantic
 anyio==3.7.1
-    # via langchain
+    # via
+    #   httpx
+    #   langchain
 async-timeout==4.0.3
     # via
     #   aiohttp
@@ -17,21 +21,18 @@ async-timeout==4.0.3
 attrs==23.1.0
     # via aiohttp
 certifi==2023.11.17
-    # via requests
+    # via
+    #   httpcore
+    #   httpx
+    #   requests
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via nltk
-dataclasses-json==0.6.2
+dataclasses-json==0.6.3
     # via langchain
-dnspython==2.4.2
-    # via email-validator
-email-validator==2.1.0.post1
-    # via pydantic
 exceptiongroup==1.2.0
     # via anyio
-fhir-resources==7.0.2
-    # via medprompt (setup.py)
 filelock==3.13.1
     # via
     #   huggingface-hub
@@ -48,15 +49,21 @@ fsspec==2023.10.0
     #   torch
 greenlet==3.0.1
     # via sqlalchemy
+h11==0.14.0
+    # via httpcore
+httpcore==1.0.2
+    # via httpx
+httpx==0.25.2
+    # via medprompt (setup.py)
 huggingface-hub==0.19.4
     # via
     #   sentence-transformers
     #   tokenizers
     #   transformers
-idna==3.4
+idna==3.6
     # via
     #   anyio
-    #   email-validator
+    #   httpx
     #   requests
     #   yarl
 jinja2==3.1.2
@@ -68,13 +75,19 @@ joblib==1.3.2
     #   nltk
     #   scikit-learn
 jsonpatch==1.33
-    # via langchain
+    # via
+    #   langchain
+    #   langchain-core
 jsonpointer==2.4
     # via jsonpatch
-langchain==0.0.340
+langchain==0.0.342
     # via medprompt (setup.py)
-langsmith==0.0.66
+langchain-core==0.0.7
     # via langchain
+langsmith==0.0.67
+    # via
+    #   langchain
+    #   langchain-core
 markupsafe==2.1.3
     # via jinja2
 marshmallow==3.20.1
@@ -137,12 +150,15 @@ packaging==23.2
     #   transformers
 pillow==10.1.0
     # via torchvision
-pydantic[email]==1.10.13
+pydantic==2.5.2
     # via
-    #   fhir-resources
     #   langchain
+    #   langchain-core
     #   langsmith
-    #   medprompt (setup.py)
+pydantic-core==2.14.5
+    # via pydantic
+python-dotenv==1.0.0
+    # via medprompt (setup.py)
 pyyaml==6.0.1
     # via
     #   huggingface-hub
@@ -157,10 +173,9 @@ requests==2.31.0
     #   huggingface-hub
     #   langchain
     #   langsmith
-    #   medprompt (setup.py)
     #   torchvision
     #   transformers
-safetensors==0.4.0
+safetensors==0.4.1
     # via transformers
 scikit-learn==1.3.2
     # via sentence-transformers
@@ -173,13 +188,17 @@ sentence-transformers==2.2.2
 sentencepiece==0.1.99
     # via sentence-transformers
 sniffio==1.3.0
-    # via anyio
+    # via
+    #   anyio
+    #   httpx
 sqlalchemy==2.0.23
     # via langchain
 sympy==1.12
     # via torch
 tenacity==8.2.3
-    # via langchain
+    # via
+    #   langchain
+    #   langchain-core
 threadpoolctl==3.2.0
     # via scikit-learn
 tokenizers==0.15.0
@@ -204,6 +223,7 @@ typing-extensions==4.8.0
     # via
     #   huggingface-hub
     #   pydantic
+    #   pydantic-core
     #   sqlalchemy
     #   torch
     #   typing-inspect

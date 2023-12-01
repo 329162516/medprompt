@@ -1,0 +1,1 @@
+{"lc": 1, "type": "constructor", "id": ["langchain", "llms", "vertexai", "VertexAI"], "kwargs": {"model_name": "text-bison@001", "n": 1, "stop": null, "max_output_tokens": 1024, "temperature": 0.1, "top_p": 0.8, "top_k": 40, "verbose": true}}
