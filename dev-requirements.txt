@@ -51,6 +51,7 @@ docutils==0.19
     #   sphinx
 filelock==3.13.1
     # via
+    #   -c requirements.txt
     #   tox
     #   virtualenv
 frozenlist==1.4.0
