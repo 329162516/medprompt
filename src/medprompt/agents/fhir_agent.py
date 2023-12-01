@@ -7,10 +7,6 @@ from medprompt.tools import CreateEmbeddingFromFhirBundle, FhirPatientSearchTool
 from medprompt import MedPrompter
 
 
-class SearchInput(BaseModel):
-    input: str = Field()
-    chat_history: List[str] = Field(default=[])
-
 class FhirAgent:
     def __init__(self, template_name="text_bison_model_v1.txt", prefix="fhir_agent_prefix_v1.jinja", suffix="fhir_agent_suffix_v1.jinja"):
         self.med_prompter = MedPrompter()
@@ -43,4 +39,8 @@ class FhirAgent:
             max_iterations=len(self.tools),
             handle_parsing_errors=True,
             agent_kwargs=self.agent_kwargs,
-            verbose=True).with_types(input_type=SearchInput)
+            verbose=True).with_types(input_type=self.SearchInput)
+
+    class SearchInput(BaseModel):
+        input: str = Field()
+        chat_history: List[str] = Field(default=[])
