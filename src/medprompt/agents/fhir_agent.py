@@ -8,20 +8,20 @@ from medprompt import MedPrompter
 
 
 class FhirAgent:
-    def __init__(self, template_name="text_bison_model_v1.txt", prefix="fhir_agent_prefix_v1.jinja", suffix="fhir_agent_suffix_v1.jinja"):
+    def __init__(self, template_path=None, llm_model="text_bison_model_v1.txt", prefix="fhir_agent_prefix_v1.jinja", suffix="fhir_agent_suffix_v1.jinja"):
         self.med_prompter = MedPrompter()
-        if ".txt" not in template_name:
-            template_name = template_name + ".txt"
-        self.med_prompter.set_template(template_name=template_name)
+        if ".txt" not in llm_model:
+            llm_model = llm_model + ".txt"
+        self.med_prompter.set_template(template_path=template_path, template_name=llm_model)
         self.llm_str = self.med_prompter.generate_prompt()
         self.llm = loads(self.llm_str)
         if ".jinja" not in prefix:
             prefix = prefix + ".jinja"
         if ".jinja" not in suffix:
             suffix = suffix + ".jinja"
-        self.med_prompter.set_template(template_name=prefix)
+        self.med_prompter.set_template(template_path=template_path, template_name=prefix)
         self.prefix = self.med_prompter.generate_prompt()
-        self.med_prompter.set_template(template_name=suffix)
+        self.med_prompter.set_template(template_path=template_path, template_name=suffix)
         self.suffix = self.med_prompter.generate_prompt()
         self.tools = [FhirPatientSearchTool(), CreateEmbeddingFromFhirBundle(), ConvertFhirToTextTool(), get_rag_chain]
         self.agent_kwargs = {
