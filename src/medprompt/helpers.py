@@ -5,8 +5,8 @@ def get_time_diff_from_today(timestamp, datetime_format="%Y-%m-%dT%H:%M:%S%z", r
     """Return the difference between the given timestamp and today's date."""
     try:
         datetime_object = datetime.strptime(timestamp, datetime_format)
-    except TypeError:
-        return ""
+    except:
+        return "some time ago"
     datetime_object = datetime_object.replace(tzinfo=timezone.utc)
     if return_type == "seconds":
         _return = (datetime.now(timezone.utc) - datetime_object).seconds
