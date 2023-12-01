@@ -2,9 +2,9 @@ from typing import List
 from langchain.agents import initialize_agent, AgentType
 from langchain.load import loads
 from pydantic import BaseModel, Field
-from src.medprompt.chains import get_rag_chain
-from src.medprompt.tools import CreateEmbeddingFromFhirBundle, FhirPatientSearchTool, ConvertFhirToTextTool
-from src.medprompt import MedPrompter
+from medprompt.chains import get_rag_chain
+from medprompt.tools import CreateEmbeddingFromFhirBundle, FhirPatientSearchTool, ConvertFhirToTextTool
+from medprompt import MedPrompter
 
 
 class SearchInput(BaseModel):

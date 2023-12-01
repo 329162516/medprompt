@@ -27,7 +27,7 @@ from langchain.schema.runnable import RunnableParallel, RunnablePassthrough
 from langchain.tools import tool
 from langchain.vectorstores import Chroma, Redis
 
-from src.medprompt import MedPrompter
+from medprompt import MedPrompter
 
 med_prompter = MedPrompter()
 class PatientId(BaseModel):
