@@ -47,8 +47,12 @@ class MedPrompter(object):
 
     def generate_prompt(self, variables: Dict[str, Any] = {}) -> str:
         self.process()
+        if self.template_name.startswith("/"):
+            _template_path = self.template_name
+        else:
+            _template_path = self.template_path + "/" + self.template_name
         if variables == {}:
-            with open(self.template_path + "/" + self.template_name) as f:
+            with open(_template_path) as f:
                 return f.read()
         prompt = self.template.render(variables)
         prompt = re.sub(r'\n+', ' ', prompt).strip()
