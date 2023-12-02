@@ -9,3 +9,9 @@ def test_check_index():
     # print(docs)
     # assert len(docs) > 0
     assert result is not None
+
+
+def test_get_rag_chain():
+    patient_id = "45657"
+    question = "What is the weight?"
+    get_rag_chain().run("Hello")

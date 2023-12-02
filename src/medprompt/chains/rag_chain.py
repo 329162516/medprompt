@@ -14,6 +14,8 @@
  limitations under the License.
 """
 
+# REF: https://github.com/langchain-ai/langserve/blob/main/examples/conversational_retrieval_chain/server.py
+
 
 import os
 import logging
@@ -33,7 +35,7 @@ from .. import MedPrompter
 med_prompter = MedPrompter()
 class PatientId(BaseModel):
     patient_id: str = Field()
-    question: str = Field(default="")
+    question: str = Field()
 
 
 EMBED_MODEL = os.getenv("EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
@@ -114,8 +116,9 @@ def get_rag_chain(patient_id: str, question: str, llm_str: str = "medpalm2_model
     if not llm:
         raise ValueError("No language model provided.")
     # RAG Chain
+    #RunnablePassthrough()
     chain = (
-        RunnableParallel({"context": retriever, "question": RunnablePassthrough()})
+        RunnableParallel({"context": retriever, "question": question})
         | prompt
         | llm
         | output_parser
