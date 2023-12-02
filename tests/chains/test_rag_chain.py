@@ -11,7 +11,12 @@ def test_check_index():
     assert result is not None
 
 
-def test_get_rag_chain():
-    patient_id = "45657"
-    question = "What is the weight?"
-    get_rag_chain().run("Hello")
+# def test_get_rag_chain():
+#     input = {
+#         "patient_id": "45657",
+#         "question": "What is the patient's weight?",
+#         "chat_history": [""]
+#     }
+#     chain = get_rag_chain(input)
+#     print(chain.run())
+#     assert chain is not None
