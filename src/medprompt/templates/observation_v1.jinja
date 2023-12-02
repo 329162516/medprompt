@@ -1,4 +1,4 @@
-{% if code.coding[0].display is defined %}
+{% if code.coding is defined  %}
 The {{ code.coding[0].display }}
 {% endif %}
 {% if time_diff is defined  %}
@@ -32,4 +32,4 @@ before {{ time_diff(effectiveDateTime, datetime_format|default("%Y-%m-%dT%H:%M:%
 {% else %}
 {{ valueBoolean }}
 {% endif %}
-. 
+.

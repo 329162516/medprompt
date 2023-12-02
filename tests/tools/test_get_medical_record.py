@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, Mock
-from medprompt.tools.get_medical_record import GetMedicalRecordTool, SearchInput
+from src.medprompt.tools.get_medical_record import GetMedicalRecordTool, SearchInput
 
 @patch('httpx.get')
 def test_run_method(mock_get):
