@@ -27,8 +27,8 @@ from langchain.schema.runnable import RunnableParallel, RunnablePassthrough
 from langchain.tools import tool
 from langchain.vectorstores import Chroma, Redis
 
-from medprompt.tools import CreateEmbeddingFromFhirBundle
-from medprompt import MedPrompter
+from ..tools import CreateEmbeddingFromFhirBundle
+from .. import MedPrompter
 
 med_prompter = MedPrompter()
 class PatientId(BaseModel):
