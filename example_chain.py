@@ -71,6 +71,10 @@ except Exception as e:
     raise e
 
 
+med_prompter.set_template(template_name="medpalm2_model_v1.txt")
+_llm_str = med_prompter.generate_prompt()
+med_palm = loads(_llm_str)
+
 def check_index(patient_id):
     if VECTORSTORE_NAME == "redis":
         try:
@@ -151,7 +155,7 @@ class ChatHistory(BaseModel):
 
 
 conversational_qa_chain = (
-    _inputs | _context | ANSWER_PROMPT | llm | StrOutputParser()
+    _inputs | _context | ANSWER_PROMPT | med_palm | StrOutputParser()
 )
 chain = conversational_qa_chain.with_types(input_type=ChatHistory)
 
