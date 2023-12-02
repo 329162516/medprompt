@@ -16,7 +16,7 @@
 
 
 import os
-
+import logging
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.llms import VertexAI
 from langchain.load import loads
@@ -27,6 +27,7 @@ from langchain.schema.runnable import RunnableParallel, RunnablePassthrough
 from langchain.tools import tool
 from langchain.vectorstores import Chroma, Redis
 
+from medprompt.tools import CreateEmbeddingFromFhirBundle
 from medprompt import MedPrompter
 
 med_prompter = MedPrompter()
@@ -45,19 +46,27 @@ embedder = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
 VECTORSTORE_NAME = os.getenv("VECTORSTORE_NAME", "chroma")
 
 def check_index(patient_id):
-    try:
-        if VECTORSTORE_NAME == "redis":
+    if VECTORSTORE_NAME == "redis":
+        try:
             vectorstore = Redis.from_existing_index(
                 embedding=embedder, index_name=patient_id, schema=INDEX_SCHEMA, redis_url=REDIS_URL
             )
             return vectorstore.as_retriever(search_type="mmr")
-        elif VECTORSTORE_NAME == "chroma":
+        except:
+            logging.info("Redis embedding not found for patient ID {}. Creating one.".format(patient_id)
+            create_embedding_tool = CreateEmbeddingFromFhirBundle()
+            _ = create_embedding_tool.run(patient_id)
+    elif VECTORSTORE_NAME == "chroma":
+        try:
             vectorstore = Chroma(collection_name=patient_id, persist_directory=os.getenv("CHROMA_DIR", "/tmp/chroma"), embedding_function=embedder)
             return vectorstore.as_retriever(search_type="mmr")
-        else:
-            return False
-    except Exception as e:
+        except:
+            logging.info("Chroma embedding not found for patient ID {}. Creating one.".format(patient_id)
+            create_embedding_tool = CreateEmbeddingFromFhirBundle()
+            _ = create_embedding_tool.run(patient_id)
+    else:
         return False
+
 
 # Usage: tools = [medpromt.chains.get_chain]
 @tool("last attempt", args_schema=PatientId)
