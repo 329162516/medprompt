@@ -1,13 +1,3 @@
-#!/usr/bin/env python
-"""Example LangChain server exposes a conversational retrieval chain.
-
-Follow the reference here:
-
-https://python.langchain.com/docs/expression_language/cookbook/retrieval#conversational-retrieval-chain
-
-To run this example, you will need to install the following packages:
-"""  # noqa: F401
-
 from operator import itemgetter
 from typing import List, Tuple
 import os
@@ -55,25 +45,17 @@ embedding = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
 # Connect to pre-loaded vectorstore
 # run the ingest.py script to populate this
 VECTORSTORE_NAME = os.getenv("VECTORSTORE_NAME", "chroma")
+RETRIEVER = None
 
-llm_str: str = "text_bison_001_model_v1"
-# Init LLM
-try:
-    if llm_str.startswith("{"):
-        llm = loads(llm_str)
-    else:
-        if ".txt" not in llm_str:
-            llm_str += ".txt"
-        med_prompter.set_template(template_name=llm_str)
-        _llm_str = med_prompter.generate_prompt()
-        llm = loads(_llm_str)
-except Exception as e:
-    raise e
-
-
-med_prompter.set_template(template_name="medpalm2_model_v1.txt")
+# Load LLMs
+_main_llm = os.getenv("MAIN_LLM", "text_bison_001_model_v1.txt")
+_clinical_llm = os.getenv("CLINICAL_LLM", "medpalm2_model_v1.txt")
+med_prompter.set_template(template_name=_main_llm)
 _llm_str = med_prompter.generate_prompt()
-med_palm = loads(_llm_str)
+main_llm = loads(_llm_str)
+med_prompter.set_template(template_name=_clinical_llm)
+_llm_str = med_prompter.generate_prompt()
+clinical_llm = loads(_llm_str)
 
 def check_index(patient_id):
     if VECTORSTORE_NAME == "redis":
@@ -81,7 +63,8 @@ def check_index(patient_id):
             vectorstore = Redis.from_existing_index(
                 embedding=embedding, index_name=patient_id, schema=INDEX_SCHEMA, redis_url=REDIS_URL
             )
-            return vectorstore.as_retriever()
+            RETRIEVER = vectorstore.as_retriever()
+            return patient_id
         except:
             logging.info("Redis embedding not found for patient ID {}. Creating one.".format(patient_id))
             create_embedding_tool = CreateEmbeddingFromFhirBundle()
@@ -89,20 +72,23 @@ def check_index(patient_id):
             vectorstore = Redis.from_existing_index(
                 embedding=embedding, index_name=patient_id, schema=INDEX_SCHEMA, redis_url=REDIS_URL
             )
-            return vectorstore.as_retriever()
+            RETRIEVER = vectorstore.as_retriever()
+            return patient_id
     elif VECTORSTORE_NAME == "chroma":
         try:
             vectorstore = Chroma(collection_name=patient_id, persist_directory=os.getenv("CHROMA_DIR", "/tmp/chroma"), embedding_function=embedding)
-            return vectorstore.as_retriever()
+            RETRIEVER = vectorstore.as_retriever()
+            return patient_id
         except:
             logging.info("Chroma embedding not found for patient ID {}. Creating one.".format(patient_id))
             create_embedding_tool = CreateEmbeddingFromFhirBundle()
             _ = create_embedding_tool.run(patient_id)
             vectorstore = Chroma(collection_name=patient_id, persist_directory=os.getenv("CHROMA_DIR", "/tmp/chroma"), embedding_function=embedding)
-            return vectorstore.as_retriever()
+            RETRIEVER = vectorstore.as_retriever()
+            return patient_id
     else:
-        print("No vectorstore found.")
-        return False
+        logging.info("No vectorstore found.")
+        return patient_id
 
 def _combine_documents(
     docs, document_prompt=DEFAULT_DOCUMENT_PROMPT, document_separator="\n\n"
@@ -127,21 +113,21 @@ def _format_chat_history(chat_history: List[Tuple]) -> str:
 # )
 # retriever = vectorstore.as_retriever()
 
-retriever = check_index("45657")
+# retriever = check_index("45657")
 
 _inputs = RunnableMap(
     standalone_question=RunnablePassthrough.assign(
-        chat_history=lambda x: _format_chat_history(x["chat_history"])
+        chat_history=lambda x: _format_chat_history(x["chat_history"]),
+        patient_id=lambda x: check_index(x["patient_id"]),
     )
     | CONDENSE_QUESTION_PROMPT
-    | llm
+    | main_llm
     | StrOutputParser(),
 )
 _context = {
-    "context": itemgetter("standalone_question") | retriever | _combine_documents,
+    "context": itemgetter("standalone_question") | RETRIEVER | _combine_documents,
     "question": lambda x: x["standalone_question"],
 }
-
 
 # User input
 class ChatHistory(BaseModel):
@@ -152,10 +138,10 @@ class ChatHistory(BaseModel):
         extra={"widget": {"type": "chat", "input": "question"}},
     )
     question: str
-
+    patient_id: str
 
 conversational_qa_chain = (
-    _inputs | _context | ANSWER_PROMPT | med_palm | StrOutputParser()
+    _inputs | _context | ANSWER_PROMPT | clinical_llm | StrOutputParser()
 )
 chain = conversational_qa_chain.with_types(input_type=ChatHistory)
 
