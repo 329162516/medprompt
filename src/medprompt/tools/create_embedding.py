@@ -90,7 +90,7 @@ class CreateEmbeddingFromFhirBundle(BaseTool):
         try:
             # Store in Redis
             if self. VECTORSTORE_NAME == "redis":
-                _ = Redis.from_texts(
+                db = Redis.from_texts(
                     # appending this little bit can sometimes help with semantic retrieval
                     # especially with multiple companies
                     # texts=[f"Company: {company_name}. " + chunk["page_content"] for chunk in chunks],
@@ -104,7 +104,7 @@ class CreateEmbeddingFromFhirBundle(BaseTool):
 
             # Store in Chroma
             elif self.VECTORSTORE_NAME == "chroma":
-                _ = Chroma.from_texts(
+                db = Chroma.from_texts(
                     persist_directory=os.getenv("CHROMA_DIR", "/tmp/chroma"),
                     texts=[chunk["page_content"] for chunk in chunks],
                     metadatas=[chunk["metadata"] for chunk in chunks],
