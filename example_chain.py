@@ -10,7 +10,7 @@ from langchain.schema import format_document
 from langchain.schema.output_parser import StrOutputParser
 from langchain.schema.runnable import RunnableMap, RunnablePassthrough
 from langchain.vectorstores import FAISS
-
+from langchain.tools import tool
 from langserve import add_routes
 from langserve.pydantic_v1 import BaseModel, Field
 from medprompt import MedPrompter
@@ -107,28 +107,6 @@ def _format_chat_history(chat_history: List[Tuple]) -> str:
         buffer += "\n" + "\n".join([human, ai])
     return buffer
 
-
-# vectorstore = Chroma.from_texts(
-#     ["Patient is a known diabetic. "], embedding=embedding
-# )
-# retriever = vectorstore.as_retriever()
-
-# retriever = check_index("45657")
-
-_inputs = RunnableMap(
-    standalone_question=RunnablePassthrough.assign(
-        chat_history=lambda x: _format_chat_history(x["chat_history"]),
-        patient_id=lambda x: check_index(x["patient_id"]),
-    )
-    | CONDENSE_QUESTION_PROMPT
-    | main_llm
-    | StrOutputParser(),
-)
-_context = {
-    "context": itemgetter("standalone_question") | RETRIEVER | _combine_documents,
-    "question": lambda x: x["standalone_question"],
-}
-
 # User input
 class ChatHistory(BaseModel):
     """Chat history with the bot."""
@@ -140,24 +118,43 @@ class ChatHistory(BaseModel):
     question: str
     patient_id: str
 
-conversational_qa_chain = (
-    _inputs | _context | ANSWER_PROMPT | clinical_llm | StrOutputParser()
-)
-chain = conversational_qa_chain.with_types(input_type=ChatHistory)
+@tool("last attempt", args_schema=ChatHistory)
+def get_rag_chain(patient_id: str ="", question: str = "", chat_history: List[Tuple[str, str]] = None):
+    _inputs = RunnableMap(
+        standalone_question=RunnablePassthrough.assign(
+            chat_history=lambda x: _format_chat_history(x["chat_history"]),
+            patient_id=lambda x: check_index(x["patient_id"]), # create embedding if not found
+        )
+        | CONDENSE_QUESTION_PROMPT
+        | main_llm
+        | StrOutputParser(),
+    )
+    _context = {
+        "context": itemgetter("standalone_question") | RETRIEVER | _combine_documents,
+        "question": lambda x: x["standalone_question"],
+    }
 
-app = FastAPI(
-    title="LangChain Server",
-    version="1.0",
-    description="Spin up a simple api server using Langchain's Runnable interfaces",
-)
-# Adds routes to the app for using the chain under:
-# /invoke
-# /batch
-# /stream
-add_routes(app, chain, enable_feedback_endpoint=True)
+    conversational_qa_chain = (
+        _inputs | _context | ANSWER_PROMPT | clinical_llm | StrOutputParser()
+    )
+    chain = conversational_qa_chain.with_types(input_type=ChatHistory)
+
+    return chain
+
 
 if __name__ == "__main__":
     import uvicorn
+    app = FastAPI(
+    title="LangChain Server",
+    version="1.0",
+    description="Spin up a simple api server using Langchain's Runnable interfaces",
+    )
+    # Adds routes to the app for using the chain under:
+    # /invoke
+    # /batch
+    # /stream
+    chain = get_rag_chain()
+    add_routes(app, chain, enable_feedback_endpoint=True)
     os.environ["LANGCHAIN_DEBUG"] = "1"
     os.environ["LANGCHAIN_LOG_LEVEL"] = "DEBUG"
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
