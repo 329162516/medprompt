@@ -22,8 +22,10 @@ attrs==23.1.0
     #   aiohttp
 babel==2.12.1
     # via sphinx
-cachetools==5.3.0
-    # via tox
+cachetools==5.3.2
+    # via
+    #   -c requirements.txt
+    #   tox
 certifi==2023.11.17
     # via
     #   -c requirements.txt
@@ -165,7 +167,7 @@ typing-extensions==4.8.0
     #   setuptools-scm
 uc-micro-py==1.0.2
     # via linkify-it-py
-urllib3==2.1.0
+urllib3==1.26.18
     # via
     #   -c requirements.txt
     #   requests

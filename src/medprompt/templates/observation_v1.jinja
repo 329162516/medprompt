@@ -1,5 +1,5 @@
-{% if code.coding[0].display is defined %}
-The {{ code.coding[0].display }}
+{% if code.coding is defined  %}
+The {{ code.coding[0].display }} {{ code.text }}
 {% endif %}
 {% if time_diff is defined  %}
 before {{ time_diff(effectiveDateTime, datetime_format|default("%Y-%m-%dT%H:%M:%S%z", true))}} was
@@ -32,4 +32,4 @@ before {{ time_diff(effectiveDateTime, datetime_format|default("%Y-%m-%dT%H:%M:%
 {% else %}
 {{ valueBoolean }}
 {% endif %}
-. 
+.

@@ -2,9 +2,9 @@ from typing import List
 from langchain.agents import initialize_agent, AgentType
 from langchain.load import loads
 from pydantic import BaseModel, Field
-from medprompt.chains import get_rag_chain
-from medprompt.tools import FhirPatientSearchTool, ConvertFhirToTextTool
-from medprompt import MedPrompter
+from ..chains import get_rag_chain
+from ..tools import FhirPatientSearchTool, ConvertFhirToTextTool
+from .. import MedPrompter
 
 
 class FhirAgent:

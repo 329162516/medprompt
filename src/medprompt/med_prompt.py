@@ -19,9 +19,16 @@
 import re
 from typing import Any, Dict, List, Optional
 import json
-from jinja2 import Environment, FileSystemLoader, meta
+from jinja2 import Environment, FileSystemLoader, meta, Undefined
 from pkg_resources import resource_filename
 
+class SilentUndefined(Undefined):
+    '''
+    Dont break pageloads because vars arent there!
+    '''
+    def _fail_with_undefined_error(self, *args, **kwargs):
+        logging.exception('JINJA2: something was undefined!')
+        return None
 
 class MedPrompter(object):
     def __init__(
@@ -55,7 +62,7 @@ class MedPrompter(object):
         return prompt
 
     def process(self):
-        self.env = Environment(loader=FileSystemLoader(self.template_path))
+        self.env = Environment(loader=FileSystemLoader(self.template_path), undefined=SilentUndefined)
         if ".json" in self.template_name:
             self.env.filters["json"] = json.dumps
         self.template = self.env.get_template(self.template_name)
