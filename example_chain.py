@@ -24,6 +24,7 @@ from langchain.vectorstores import FAISS
 from langserve import add_routes
 from langserve.pydantic_v1 import BaseModel, Field
 from medprompt import MedPrompter
+from medprompt.tools import CreateEmbeddingFromFhirBundle
 from langchain.load import loads
 from langchain.vectorstores import Chroma, Redis
 
@@ -70,6 +71,35 @@ except Exception as e:
     raise e
 
 
+def check_index(patient_id):
+    if VECTORSTORE_NAME == "redis":
+        try:
+            vectorstore = Redis.from_existing_index(
+                embedding=embedding, index_name=patient_id, schema=INDEX_SCHEMA, redis_url=REDIS_URL
+            )
+            return vectorstore.as_retriever()
+        except:
+            logging.info("Redis embedding not found for patient ID {}. Creating one.".format(patient_id))
+            create_embedding_tool = CreateEmbeddingFromFhirBundle()
+            _ = create_embedding_tool.run(patient_id)
+            vectorstore = Redis.from_existing_index(
+                embedding=embedding, index_name=patient_id, schema=INDEX_SCHEMA, redis_url=REDIS_URL
+            )
+            return vectorstore.as_retriever()
+    elif VECTORSTORE_NAME == "chroma":
+        try:
+            vectorstore = Chroma(collection_name=patient_id, persist_directory=os.getenv("CHROMA_DIR", "/tmp/chroma"), embedding_function=embedding)
+            return vectorstore.as_retriever()
+        except:
+            logging.info("Chroma embedding not found for patient ID {}. Creating one.".format(patient_id))
+            create_embedding_tool = CreateEmbeddingFromFhirBundle()
+            _ = create_embedding_tool.run(patient_id)
+            vectorstore = Chroma(collection_name=patient_id, persist_directory=os.getenv("CHROMA_DIR", "/tmp/chroma"), embedding_function=embedding)
+            return vectorstore.as_retriever()
+    else:
+        print("No vectorstore found.")
+        return False
+
 def _combine_documents(
     docs, document_prompt=DEFAULT_DOCUMENT_PROMPT, document_separator="\n\n"
 ):
@@ -88,10 +118,12 @@ def _format_chat_history(chat_history: List[Tuple]) -> str:
     return buffer
 
 
-vectorstore = Chroma.from_texts(
-    ["Patient is a known diabetic. "], embedding=embedding
-)
-retriever = vectorstore.as_retriever()
+# vectorstore = Chroma.from_texts(
+#     ["Patient is a known diabetic. "], embedding=embedding
+# )
+# retriever = vectorstore.as_retriever()
+
+retriever = check_index("45657")
 
 _inputs = RunnableMap(
     standalone_question=RunnablePassthrough.assign(
