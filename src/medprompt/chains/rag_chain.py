@@ -138,6 +138,16 @@ class ChatHistory(BaseModel):
 
 @tool("last attempt", args_schema=ChatHistory)
 def get_rag_chain(patient_id: str ="", question: str = "", chat_history: List[Tuple[str, str]] = None):
+    """
+    Returns a chain that can be used to finally answer a question based on a patient's medical record.
+    Use this chain to answer a question as a final step if it was not found before.
+    Do not use this tool with the same input/query.
+
+    Args:
+        patient_id (str): The id of the patient to search for.
+        question (str): The question to ask the model based on the available context.
+        chat_history (List[Tuple[str, str]]): The chat history with the bot.
+    """
     _inputs = RunnableMap(
         standalone_question=RunnablePassthrough.assign(
             chat_history=lambda x: _format_chat_history(x["chat_history"]),
