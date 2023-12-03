@@ -148,7 +148,7 @@ def get_rag_tool(**kwargs):
     Args:
         patient_id (str): The id of the patient to search for.
         question (str): The question to ask the model based on the available context.
-        chat_history (List[Tuple[str, str]]): The chat history with the bot.
+        chat_history (List[str]): The chat history with the bot.
     """
     return get_runnable(**kwargs)
 
