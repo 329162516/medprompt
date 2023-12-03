@@ -1,5 +1,5 @@
 # MEDPrompt
-## Medical prompts for Large Language Models (LLMs) ✍️
+## *Prompts, tools, chains and agents* for healthcare using *LLMs & FHIR*.  ✍️
 ![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/pypi/medprompt)
 [![PyPI download total](https://img.shields.io/pypi/dm/medprompt.svg)](https://pypi.python.org/pypi/medprompt/)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/dermatologist/medprompt)
