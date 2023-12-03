@@ -17,7 +17,7 @@
 
 import logging
 import os
-from typing import List, Tuple, Any
+from typing import List
 from fastapi import FastAPI
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.load import loads
@@ -29,22 +29,22 @@ from langchain.schema.runnable import RunnableMap, RunnablePassthrough
 from langchain.tools import tool
 from langchain.vectorstores import Chroma, Redis
 from langserve import add_routes
-from langserve.pydantic_v1 import BaseModel, Field
+from langserve.pydantic_v1 import BaseModel
 
 from .. import MedPrompter
 from ..tools import CreateEmbeddingFromFhirBundle
 
 med_prompter = MedPrompter()
-_TEMPLATE = """Given the following conversation and a follow up input question, rephrase the
-follow up input question to be a standalone question, in its original language.
+_TEMPLATE = """Given the following conversation and a follow up input, rephrase the
+follow up input to be a standalone input, in its original language.
 
 Chat History:
 {chat_history}
-Follow Up Input Question: {input}
-Standalone input question:"""
+Follow Up Input: {input}
+Standalone input:"""
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_TEMPLATE)
 
-ANSWER_TEMPLATE = """Answer the input question based only on the following context:
+ANSWER_TEMPLATE = """Answer the input based only on the following context:
 {context}
 
 Question: {input}
@@ -116,7 +116,7 @@ def _format_chat_history(chat_history: List[str]) -> str:
 class ChatHistory(BaseModel):
     """Chat history with the bot."""
 
-    chat_history: Any
+    chat_history: List[str]
     input: str
     patient_id: str
 
@@ -153,7 +153,7 @@ def get_rag_tool(**kwargs):
         input (str): The input to ask the model based on the available context.
         chat_history (List): The previous chats.
     """
-    return get_runnable().invoke(**kwargs)
+    return get_runnable().invoke(kwargs)
 
 if __name__ == "__main__":
     import uvicorn
