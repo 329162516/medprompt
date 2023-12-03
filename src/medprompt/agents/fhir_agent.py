@@ -15,8 +15,8 @@ class SearchInput(BaseModel):
         ...,
         extra={"widget": {"type": "chat", "input": "question"}},
     )
-    question: str
-    patient_id: str
+    input: str
+
 
 class FhirAgent:
     def __init__(self, template_path=None, llm_model="text_bison_model_v1.txt", prefix="fhir_agent_prefix_v1.jinja", suffix="fhir_agent_suffix_v1.jinja"):
@@ -38,7 +38,7 @@ class FhirAgent:
         self.agent_kwargs = {
             "prefix": self.prefix,
             "suffix": self.suffix,
-            "input_variables": ["question", "chat_history", "agent_scratchpad"],
+            "input_variables": ["input", "chat_history", "agent_scratchpad"],
         }
 
     def get_agent(self):
@@ -50,5 +50,6 @@ class FhirAgent:
             max_iterations=len(self.tools),
             handle_parsing_errors=True,
             agent_kwargs=self.agent_kwargs,
-            verbose=True).with_types(input_type=SearchInput)
+            verbose=False).with_types(input_type=SearchInput, output_type=str)
+
 
