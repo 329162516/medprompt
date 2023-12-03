@@ -50,6 +50,6 @@ class FhirAgent:
             max_iterations=len(self.tools),
             handle_parsing_errors=True,
             agent_kwargs=self.agent_kwargs,
-            verbose=False).with_types(input_type=SearchInput, output_type=str)
+            verbose=True).with_types(input_type=SearchInput)
 
 
