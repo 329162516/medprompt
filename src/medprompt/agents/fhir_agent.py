@@ -38,7 +38,7 @@ class FhirAgent:
         self.agent_kwargs = {
             "prefix": self.prefix,
             "suffix": self.suffix,
-            "input_variables": ["input", "chat_history", "agent_scratchpad"],
+            "input_variables": ["question", "chat_history", "agent_scratchpad"],
         }
 
     def get_agent(self):

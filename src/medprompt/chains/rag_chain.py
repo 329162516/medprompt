@@ -92,7 +92,7 @@ def check_index(input_object):
     else:
         logging.info("No vectorstore found.")
         return None
-    return vectorstore.as_retriever()
+    return vectorstore.as_retriever().get_relevant_documents(input_object["question"], k=10)
 
 
 def _combine_documents(

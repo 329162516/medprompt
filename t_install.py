@@ -44,7 +44,7 @@ add_routes(
 
 add_routes(
     app,
-    get_runnable,
+    get_runnable(),
     path="/rag_chain",
 )
 
