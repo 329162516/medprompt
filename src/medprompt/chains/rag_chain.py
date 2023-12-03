@@ -17,7 +17,7 @@
 
 import logging
 import os
-from typing import List, Tuple
+from typing import List, Tuple, Any
 from fastapi import FastAPI
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.load import loads
@@ -106,6 +106,8 @@ def _combine_documents(
 def _format_chat_history(chat_history: List[str]) -> str:
     """Format chat history into a string."""
     buffer = ""
+    if not chat_history:
+        return buffer
     for dialogue_turn in chat_history:
         buffer += "\n" + dialogue_turn
     return buffer
@@ -114,7 +116,7 @@ def _format_chat_history(chat_history: List[str]) -> str:
 class ChatHistory(BaseModel):
     """Chat history with the bot."""
 
-    chat_history: List[str] = Field()
+    chat_history: Any
     question: str
     patient_id: str
 
@@ -134,8 +136,8 @@ def get_runnable(**kwargs):
         context=context,
         question=question,
     )
-    _chain = _inputs | ANSWER_PROMPT | clinical_llm | StrOutputParser()
-    chain = _chain.with_types(input_type=ChatHistory, output_type=str)
+    _chain = _inputs | ANSWER_PROMPT | main_llm | StrOutputParser()
+    chain = _chain.with_types(input_type=ChatHistory)
     return chain
 
 @tool("last attempt", args_schema=ChatHistory)
@@ -144,13 +146,14 @@ def get_rag_tool(**kwargs):
     Returns a chain that can be used to finally answer a question based on a patient's medical record.
     Use this chain to answer a question as a final step if it was not found before.
     Do not use this tool with the same input/query.
+    The Observation from this tool is "The embedding created for the patient's medical record."
 
     Args:
         patient_id (str): The id of the patient to search for.
         question (str): The question to ask the model based on the available context.
-        chat_history (List[str]): The chat history with the bot.
+        chat_history (List): The previous chats.
     """
-    return get_runnable(**kwargs)
+    return get_runnable().invoke(**kwargs)
 
 if __name__ == "__main__":
     import uvicorn
