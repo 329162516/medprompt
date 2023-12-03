@@ -17,9 +17,7 @@
 
 import logging
 import os
-from operator import itemgetter
 from typing import List, Tuple
-
 from fastapi import FastAPI
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.load import loads
@@ -52,18 +50,12 @@ ANSWER_TEMPLATE = """Answer the question based only on the following context:
 Question: {question}
 """
 ANSWER_PROMPT = ChatPromptTemplate.from_template(ANSWER_TEMPLATE)
-
 DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="{page_content}")
-
 EMBED_MODEL = os.getenv("EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 INDEX_SCHEMA = os.path.join(os.path.dirname(__file__), "schema.yml")
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
-# Init Embeddings
 embedding = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
-# Connect to pre-loaded vectorstore
-# run the ingest.py script to populate this
 VECTORSTORE_NAME = os.getenv("VECTORSTORE_NAME", "chroma")
-RETRIEVER = None
 
 # Load LLMs
 _main_llm = os.getenv("MAIN_LLM", "text_bison_001_model_v1.txt")
@@ -75,14 +67,13 @@ med_prompter.set_template(template_name=_clinical_llm)
 _llm_str = med_prompter.generate_prompt()
 clinical_llm = loads(_llm_str)
 
-def check_index(patient_id):
+def check_index(input_object):
+    patient_id = input_object
     if VECTORSTORE_NAME == "redis":
         try:
             vectorstore = Redis.from_existing_index(
                 embedding=embedding, index_name=patient_id, schema=INDEX_SCHEMA, redis_url=REDIS_URL
             )
-            RETRIEVER = vectorstore.as_retriever()
-            return patient_id
         except:
             logging.info("Redis embedding not found for patient ID {}. Creating one.".format(patient_id))
             create_embedding_tool = CreateEmbeddingFromFhirBundle()
@@ -90,23 +81,19 @@ def check_index(patient_id):
             vectorstore = Redis.from_existing_index(
                 embedding=embedding, index_name=patient_id, schema=INDEX_SCHEMA, redis_url=REDIS_URL
             )
-            RETRIEVER = vectorstore.as_retriever()
-            return patient_id
     elif VECTORSTORE_NAME == "chroma":
         try:
             vectorstore = Chroma(collection_name=patient_id, persist_directory=os.getenv("CHROMA_DIR", "/tmp/chroma"), embedding_function=embedding)
-            RETRIEVER = vectorstore.as_retriever()
-            return patient_id
         except:
             logging.info("Chroma embedding not found for patient ID {}. Creating one.".format(patient_id))
             create_embedding_tool = CreateEmbeddingFromFhirBundle()
             _ = create_embedding_tool.run(patient_id)
             vectorstore = Chroma(collection_name=patient_id, persist_directory=os.getenv("CHROMA_DIR", "/tmp/chroma"), embedding_function=embedding)
-            RETRIEVER = vectorstore.as_retriever()
-            return patient_id
     else:
         logging.info("No vectorstore found.")
-        return patient_id
+        return None
+    return vectorstore.as_retriever()
+
 
 def _combine_documents(
     docs, document_prompt=DEFAULT_DOCUMENT_PROMPT, document_separator="\n\n"
@@ -136,8 +123,28 @@ class ChatHistory(BaseModel):
     question: str
     patient_id: str
 
+def get_runnable():
+    """Get the runnable chain."""
+    context = RunnablePassthrough.assign(
+        chat_history=lambda x: _format_chat_history(x["chat_history"]),
+        patient_id=lambda x: x["patient_id"],
+        question=lambda x: x["question"],
+    ) | check_index | _combine_documents
+    question = RunnablePassthrough.assign(
+        chat_history=lambda x: _format_chat_history(x["chat_history"]),
+        patient_id=lambda x: x["patient_id"],
+        question=lambda x: x["question"],
+    ) | CONDENSE_QUESTION_PROMPT | main_llm | StrOutputParser()
+    _inputs = RunnableMap(
+        context=context,
+        question=question,
+    )
+    _chain = _inputs | ANSWER_PROMPT | clinical_llm | StrOutputParser()
+    chain = _chain.with_types(input_type=ChatHistory, output_type=str)
+    return chain
+
 @tool("last attempt", args_schema=ChatHistory)
-def get_rag_chain(patient_id: str ="", question: str = "", chat_history: List[Tuple[str, str]] = None):
+def get_rag_chain():
     """
     Returns a chain that can be used to finally answer a question based on a patient's medical record.
     Use this chain to answer a question as a final step if it was not found before.
@@ -148,27 +155,7 @@ def get_rag_chain(patient_id: str ="", question: str = "", chat_history: List[Tu
         question (str): The question to ask the model based on the available context.
         chat_history (List[Tuple[str, str]]): The chat history with the bot.
     """
-    _inputs = RunnableMap(
-        standalone_question=RunnablePassthrough.assign(
-            chat_history=lambda x: _format_chat_history(x["chat_history"]),
-            patient_id=lambda x: check_index(x["patient_id"]), # create embedding if not found
-        )
-        | CONDENSE_QUESTION_PROMPT
-        | main_llm
-        | StrOutputParser(),
-    )
-    _context = {
-        "context": itemgetter("standalone_question") | RETRIEVER | _combine_documents,
-        "question": lambda x: x["standalone_question"],
-    }
-
-    conversational_qa_chain = (
-        _inputs | _context | ANSWER_PROMPT | clinical_llm | StrOutputParser()
-    )
-    chain = conversational_qa_chain.with_types(input_type=ChatHistory)
-
-    return chain
-
+    return get_runnable()
 
 if __name__ == "__main__":
     import uvicorn

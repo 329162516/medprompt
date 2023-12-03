@@ -1,20 +1,56 @@
-from medprompt import MedPrompter
-from medprompt.tools import FhirPatientSearchTool
-from medprompt.tools import ConvertFhirToTextTool
-from medprompt.tools import CreateEmbeddingFromFhirBundle
-from medprompt.tools import GetMedicalRecordTool
+import os
+from fastapi import FastAPI
+from langserve import add_routes
 from medprompt.chains import get_rag_chain
+from medprompt.tools import FhirPatientSearchTool, ConvertFhirToTextTool
 from medprompt.agents import FhirAgent
+from fastapi.middleware.cors import CORSMiddleware
 
-prompt = MedPrompter()
-prompt.set_template(
-    template_name="fhir_search_oai_chat_v1.json")
 
-print(prompt.get_template_variables())
+app = FastAPI(
+  title="Maya Tools, Chains and Agents Server",
+  version="1.0",
+  description="A simple api server using Langchain's Runnable interfaces and LangServe",
+)
 
-messages = prompt.generate_prompt(
-    {"question": "Find Conditions for patient with first name John?"})
+# Set all CORS enabled origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
 
-print(messages)
-tools = [FhirPatientSearchTool()]
+add_routes(
+    app,
+    FhirPatientSearchTool(),
+    path="/patient_search",
+)
 
+add_routes(
+    app,
+    ConvertFhirToTextTool(),
+    path="/flatten",
+)
+
+
+add_routes(
+    app,
+    FhirAgent.get_agent(),
+    path="/agent",
+)
+
+add_routes(
+    app,
+    get_rag_chain,
+    path="/rag_chain",
+)
+
+if __name__ == "__main__":
+    import uvicorn
+    os.environ["LANGCHAIN_DEBUG"] = "1"
+    os.environ["LANGCHAIN_LOG_LEVEL"] = "DEBUG"
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
