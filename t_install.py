@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI
 from langserve import add_routes
-from medprompt.chains import get_rag_chain
+from medprompt.chains import get_rag_tool, get_runnable
 from medprompt.tools import FhirPatientSearchTool, ConvertFhirToTextTool
 from medprompt.agents import FhirAgent
 from fastapi.middleware.cors import CORSMiddleware
@@ -44,7 +44,7 @@ add_routes(
 
 add_routes(
     app,
-    get_rag_chain,
+    get_runnable,
     path="/rag_chain",
 )
 

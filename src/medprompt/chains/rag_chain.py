@@ -123,7 +123,7 @@ class ChatHistory(BaseModel):
     question: str
     patient_id: str
 
-def get_runnable():
+def get_runnable(**kwargs):
     """Get the runnable chain."""
     context = RunnablePassthrough.assign(
         chat_history=lambda x: _format_chat_history(x["chat_history"]),
@@ -144,7 +144,7 @@ def get_runnable():
     return chain
 
 @tool("last attempt", args_schema=ChatHistory)
-def get_rag_chain():
+def get_rag_tool(**kwargs):
     """
     Returns a chain that can be used to finally answer a question based on a patient's medical record.
     Use this chain to answer a question as a final step if it was not found before.
@@ -155,7 +155,7 @@ def get_rag_chain():
         question (str): The question to ask the model based on the available context.
         chat_history (List[Tuple[str, str]]): The chat history with the bot.
     """
-    return get_runnable()
+    return get_runnable(**kwargs)
 
 if __name__ == "__main__":
     import uvicorn
@@ -168,7 +168,7 @@ if __name__ == "__main__":
     # /invoke
     # /batch
     # /stream
-    chain = get_rag_chain()
+    chain = get_runnable()
     add_routes(app, chain, enable_feedback_endpoint=True)
     os.environ["LANGCHAIN_DEBUG"] = "1"
     os.environ["LANGCHAIN_LOG_LEVEL"] = "DEBUG"
