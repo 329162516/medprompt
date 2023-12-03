@@ -8,6 +8,7 @@ aiohttp==3.9.1
     # via
     #   -c requirements.txt
     #   aioresponses
+    #   langchain
 aioresponses==0.7.6
     # via -r dev-requirements.in
 aiosignal==1.3.1
@@ -16,6 +17,12 @@ aiosignal==1.3.1
     #   aiohttp
 alabaster==0.7.13
     # via sphinx
+anyio==3.7.1
+    # via
+    #   -c requirements.txt
+    #   httpx
+    #   langchain
+    #   starlette
 attrs==23.1.0
     # via
     #   -c requirements.txt
@@ -23,12 +30,12 @@ attrs==23.1.0
 babel==2.12.1
     # via sphinx
 cachetools==5.3.2
-    # via
-    #   -c requirements.txt
-    #   tox
+    # via tox
 certifi==2023.11.17
     # via
     #   -c requirements.txt
+    #   httpcore
+    #   httpx
     #   requests
 chardet==5.1.0
     # via tox
@@ -36,6 +43,10 @@ charset-normalizer==3.3.2
     # via
     #   -c requirements.txt
     #   requests
+click==8.1.7
+    # via
+    #   -c requirements.txt
+    #   uvicorn
 colorama==0.4.6
     # via tox
 commonmark==0.9.1
@@ -44,6 +55,10 @@ coverage[toml]==7.2.3
     # via
     #   coverage
     #   pytest-cov
+dataclasses-json==0.6.3
+    # via
+    #   -c requirements.txt
+    #   langchain
 distlib==0.3.6
     # via virtualenv
 docutils==0.19
@@ -51,6 +66,10 @@ docutils==0.19
     #   myst-parser
     #   recommonmark
     #   sphinx
+fastapi==0.85.1
+    # via
+    #   -c requirements.txt
+    #   -r dev-requirements.in
 filelock==3.13.1
     # via
     #   -c requirements.txt
@@ -61,9 +80,28 @@ frozenlist==1.4.0
     #   -c requirements.txt
     #   aiohttp
     #   aiosignal
+greenlet==3.0.1
+    # via
+    #   -c requirements.txt
+    #   sqlalchemy
+h11==0.14.0
+    # via
+    #   -c requirements.txt
+    #   httpcore
+    #   uvicorn
+httpcore==1.0.2
+    # via
+    #   -c requirements.txt
+    #   httpx
+httpx==0.25.2
+    # via
+    #   -c requirements.txt
+    #   langserve
 idna==3.6
     # via
     #   -c requirements.txt
+    #   anyio
+    #   httpx
     #   requests
     #   yarl
 imagesize==1.4.1
@@ -75,6 +113,30 @@ jinja2==3.1.2
     #   -c requirements.txt
     #   myst-parser
     #   sphinx
+jsonpatch==1.33
+    # via
+    #   -c requirements.txt
+    #   langchain
+    #   langchain-core
+jsonpointer==2.4
+    # via
+    #   -c requirements.txt
+    #   jsonpatch
+langchain==0.0.345
+    # via
+    #   -c requirements.txt
+    #   langserve
+langchain-core==0.0.9
+    # via
+    #   -c requirements.txt
+    #   langchain
+langserve==0.0.32
+    # via -r dev-requirements.in
+langsmith==0.0.69
+    # via
+    #   -c requirements.txt
+    #   langchain
+    #   langchain-core
 linkify-it-py==2.0.2
     # via myst-parser
 markdown-it-py==3.0.0
@@ -85,6 +147,10 @@ markupsafe==2.1.3
     # via
     #   -c requirements.txt
     #   jinja2
+marshmallow==3.20.1
+    # via
+    #   -c requirements.txt
+    #   dataclasses-json
 mdit-py-plugins==0.4.0
     # via myst-parser
 mdurl==0.1.2
@@ -94,11 +160,22 @@ multidict==6.0.4
     #   -c requirements.txt
     #   aiohttp
     #   yarl
+mypy-extensions==1.0.0
+    # via
+    #   -c requirements.txt
+    #   typing-inspect
 myst-parser[linkify]==2.0.0
     # via -r dev-requirements.in
+numpy==1.26.2
+    # via
+    #   -c requirements.txt
+    #   langchain
+orjson==3.9.10
+    # via langserve
 packaging==23.2
     # via
     #   -c requirements.txt
+    #   marshmallow
     #   pyproject-api
     #   pytest
     #   setuptools-scm
@@ -112,6 +189,14 @@ pluggy==1.0.0
     # via
     #   pytest
     #   tox
+pydantic==1.10.13
+    # via
+    #   -c requirements.txt
+    #   fastapi
+    #   langchain
+    #   langchain-core
+    #   langserve
+    #   langsmith
 pygments==2.15.1
     # via sphinx
 pyproject-api==1.5.1
@@ -125,6 +210,7 @@ pytest-cov==4.0.0
 pyyaml==6.0.1
     # via
     #   -c requirements.txt
+    #   langchain
     #   myst-parser
     #   responses
 recommonmark==0.7.1
@@ -132,12 +218,19 @@ recommonmark==0.7.1
 requests==2.31.0
     # via
     #   -c requirements.txt
+    #   langchain
+    #   langsmith
     #   responses
     #   sphinx
 responses==0.23.1
     # via -r dev-requirements.in
 setuptools-scm==7.1.0
     # via -r dev-requirements.in
+sniffio==1.3.0
+    # via
+    #   -c requirements.txt
+    #   anyio
+    #   httpx
 snowballstemmer==2.2.0
     # via sphinx
 sphinx==7.1.2
@@ -157,6 +250,19 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
+sqlalchemy==2.0.23
+    # via
+    #   -c requirements.txt
+    #   langchain
+starlette==0.20.4
+    # via
+    #   -c requirements.txt
+    #   fastapi
+tenacity==8.2.3
+    # via
+    #   -c requirements.txt
+    #   langchain
+    #   langchain-core
 tox==4.4.12
     # via -r dev-requirements.in
 types-pyyaml==6.0.12.9
@@ -164,14 +270,25 @@ types-pyyaml==6.0.12.9
 typing-extensions==4.8.0
     # via
     #   -c requirements.txt
+    #   pydantic
     #   setuptools-scm
+    #   sqlalchemy
+    #   typing-inspect
+typing-inspect==0.9.0
+    # via
+    #   -c requirements.txt
+    #   dataclasses-json
 uc-micro-py==1.0.2
     # via linkify-it-py
-urllib3==1.26.18
+urllib3==2.1.0
     # via
     #   -c requirements.txt
     #   requests
     #   responses
+uvicorn==0.24.0.post1
+    # via
+    #   -c requirements.txt
+    #   -r dev-requirements.in
 virtualenv==20.22.0
     # via tox
 wheel==0.40.0

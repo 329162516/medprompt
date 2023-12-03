@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from langchain.agents import initialize_agent, AgentType
 from langchain.load import loads
 from pydantic import BaseModel, Field
@@ -6,6 +6,17 @@ from ..chains import get_rag_chain
 from ..tools import FhirPatientSearchTool, ConvertFhirToTextTool
 from .. import MedPrompter
 
+
+
+class SearchInput(BaseModel):
+    """Chat history with the bot."""
+
+    chat_history: List[Tuple[str, str]] = Field(
+        ...,
+        extra={"widget": {"type": "chat", "input": "question"}},
+    )
+    question: str
+    patient_id: str
 
 class FhirAgent:
     def __init__(self, template_path=None, llm_model="text_bison_model_v1.txt", prefix="fhir_agent_prefix_v1.jinja", suffix="fhir_agent_suffix_v1.jinja"):
@@ -39,8 +50,5 @@ class FhirAgent:
             max_iterations=len(self.tools),
             handle_parsing_errors=True,
             agent_kwargs=self.agent_kwargs,
-            verbose=True).with_types(input_type=self.SearchInput)
+            verbose=True).with_types(input_type=SearchInput)
 
-    class SearchInput(BaseModel):
-        input: str = Field()
-        chat_history: List[str] = Field(default=[])
