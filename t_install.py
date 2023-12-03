@@ -1,14 +1,14 @@
 import os
 from fastapi import FastAPI
 from langserve import add_routes
-from medprompt.chains import get_rag_tool, get_runnable
+from medprompt.chains import get_runnable
 from medprompt.tools import FhirPatientSearchTool, ConvertFhirToTextTool
 from medprompt.agents import FhirAgent
 from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI(
-  title="Maya Tools, Chains and Agents Server",
+  title="Healthcare Tools, Chains and Agents Server",
   version="1.0",
   description="A simple api server using Langchain's Runnable interfaces and LangServe",
 )
@@ -26,7 +26,7 @@ app.add_middleware(
 add_routes(
     app,
     FhirPatientSearchTool(),
-    path="/patient_search",
+    path="/search",
 )
 
 add_routes(
@@ -45,7 +45,7 @@ add_routes(
 add_routes(
     app,
     get_runnable(),
-    path="/rag_chain",
+    path="/chain",
 )
 
 if __name__ == "__main__":
