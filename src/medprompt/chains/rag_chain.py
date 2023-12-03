@@ -35,19 +35,20 @@ from .. import MedPrompter
 from ..tools import CreateEmbeddingFromFhirBundle
 
 med_prompter = MedPrompter()
-_TEMPLATE = """Given the following conversation and a follow up input, rephrase the
-follow up input to be a standalone input, in its original language.
+_TEMPLATE = """Given the following chat history and a follow up question, rephrase the
+follow up question to be a standalone question, in its original language that includes context from previous chat history.
 
 Chat History:
 {chat_history}
-Follow Up Input: {input}
-Standalone input:"""
+Follow Up Question: {input}
+Standalone question:"""
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_TEMPLATE)
 
-ANSWER_TEMPLATE = """Answer the input based only on the following context:
+ANSWER_TEMPLATE = """Answer the clinical question based only on the following context:
 {context}
 
 Question: {input}
+Give clinical interpretations based only on the facts in the context.
 """
 ANSWER_PROMPT = ChatPromptTemplate.from_template(ANSWER_TEMPLATE)
 DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="{page_content}")
@@ -143,32 +144,13 @@ def get_runnable(**kwargs):
 @tool("last attempt", args_schema=ChatHistory)
 def get_rag_tool(**kwargs):
     """
-    Returns a chain that can be used to finally answer a input based on a patient's medical record.
-    Use this chain to answer a input as a final step if it was not found before.
-    Do not use this tool with the same input/query.
-    The Observation from this tool is "The embedding created for the patient's medical record."
+    Returns a chain that can be used to finally answer a question based on a patient's medical record.
+    Use this chain to answer a question as a final step if it was not found before.
+    Do not use this tool again with the same input/query.
 
     Args:
         patient_id (str): The id of the patient to search for.
-        input (str): The input to ask the model based on the available context.
-        chat_history (List): The previous chats.
+        input (str): The question to ask the model based on the available context.
+        chat_history (List): The previous conversation history.
     """
     return get_runnable().invoke(kwargs)
-
-if __name__ == "__main__":
-    import uvicorn
-    app = FastAPI(
-    title="LangChain Server",
-    version="1.0",
-    description="Spin up a simple api server using Langchain's Runnable interfaces",
-    )
-    # Adds routes to the app for using the chain under:
-    # /invoke
-    # /batch
-    # /stream
-    chain = get_runnable()
-    add_routes(app, chain, enable_feedback_endpoint=True)
-    os.environ["LANGCHAIN_DEBUG"] = "1"
-    os.environ["LANGCHAIN_LOG_LEVEL"] = "DEBUG"
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
-    uvicorn.run(app, host="localhost", port=8000)

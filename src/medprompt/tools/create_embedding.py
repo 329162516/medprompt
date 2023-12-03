@@ -14,17 +14,14 @@
  limitations under the License.
 """
 
-
 import os
 from typing import Any, Optional, Type
-
 from langchain.callbacks.manager import (AsyncCallbackManagerForToolRun,
                                          CallbackManagerForToolRun)
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.tools import BaseTool
 from langchain.vectorstores import Redis, Chroma
 from langchain.pydantic_v1 import BaseModel, Field
-
 from .. import MedPrompter, get_time_diff_from_today
 from .get_medical_record import GetMedicalRecordTool
 

@@ -6,14 +6,10 @@ from ..chains import get_rag_tool
 from ..tools import FhirPatientSearchTool, ConvertFhirToTextTool
 from .. import MedPrompter
 
-
-
 class SearchInput(BaseModel):
     """Chat history with the bot."""
-
     chat_history: List[str] = Field()
     input: str
-
 
 class FhirAgent:
     def __init__(self, template_path=None, llm_model="text_bison_model_v1.txt", prefix="fhir_agent_prefix_v1.jinja", suffix="fhir_agent_suffix_v1.jinja"):
