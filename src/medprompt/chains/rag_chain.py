@@ -35,19 +35,19 @@ from .. import MedPrompter
 from ..tools import CreateEmbeddingFromFhirBundle
 
 med_prompter = MedPrompter()
-_TEMPLATE = """Given the following conversation and a follow up question, rephrase the
-follow up question to be a standalone question, in its original language.
+_TEMPLATE = """Given the following conversation and a follow up input question, rephrase the
+follow up input question to be a standalone question, in its original language.
 
 Chat History:
 {chat_history}
-Follow Up Input: {question}
-Standalone question:"""
+Follow Up Input Question: {input}
+Standalone input question:"""
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_TEMPLATE)
 
-ANSWER_TEMPLATE = """Answer the question based only on the following context:
+ANSWER_TEMPLATE = """Answer the input question based only on the following context:
 {context}
 
-Question: {question}
+Question: {input}
 """
 ANSWER_PROMPT = ChatPromptTemplate.from_template(ANSWER_TEMPLATE)
 DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="{page_content}")
@@ -92,7 +92,7 @@ def check_index(input_object):
     else:
         logging.info("No vectorstore found.")
         return None
-    return vectorstore.as_retriever().get_relevant_documents(input_object["question"], k=10)
+    return vectorstore.as_retriever().get_relevant_documents(input_object["input"], k=10)
 
 
 def _combine_documents(
@@ -117,7 +117,7 @@ class ChatHistory(BaseModel):
     """Chat history with the bot."""
 
     chat_history: Any
-    question: str
+    input: str
     patient_id: str
 
 def get_runnable(**kwargs):
@@ -125,16 +125,16 @@ def get_runnable(**kwargs):
     context = RunnablePassthrough.assign(
         chat_history=lambda x: _format_chat_history(x["chat_history"]),
         patient_id=lambda x: x["patient_id"],
-        question=lambda x: x["question"],
+        input=lambda x: x["input"],
     ) | check_index | _combine_documents
-    question = RunnablePassthrough.assign(
+    input = RunnablePassthrough.assign(
         chat_history=lambda x: _format_chat_history(x["chat_history"]),
         patient_id=lambda x: x["patient_id"],
-        question=lambda x: x["question"],
+        input=lambda x: x["input"],
     ) | CONDENSE_QUESTION_PROMPT | main_llm | StrOutputParser()
     _inputs = RunnableMap(
         context=context,
-        question=question,
+        input=input,
     )
     _chain = _inputs | ANSWER_PROMPT | main_llm | StrOutputParser()
     chain = _chain.with_types(input_type=ChatHistory)
@@ -143,14 +143,14 @@ def get_runnable(**kwargs):
 @tool("last attempt", args_schema=ChatHistory)
 def get_rag_tool(**kwargs):
     """
-    Returns a chain that can be used to finally answer a question based on a patient's medical record.
-    Use this chain to answer a question as a final step if it was not found before.
+    Returns a chain that can be used to finally answer a input based on a patient's medical record.
+    Use this chain to answer a input as a final step if it was not found before.
     Do not use this tool with the same input/query.
     The Observation from this tool is "The embedding created for the patient's medical record."
 
     Args:
         patient_id (str): The id of the patient to search for.
-        question (str): The question to ask the model based on the available context.
+        input (str): The input to ask the model based on the available context.
         chat_history (List): The previous chats.
     """
     return get_runnable().invoke(**kwargs)
