@@ -103,23 +103,18 @@ def _combine_documents(
     return document_separator.join(doc_strings)
 
 
-def _format_chat_history(chat_history: List[Tuple]) -> str:
+def _format_chat_history(chat_history: List[str]) -> str:
     """Format chat history into a string."""
     buffer = ""
     for dialogue_turn in chat_history:
-        human = "Human: " + dialogue_turn[0]
-        ai = "Assistant: " + dialogue_turn[1]
-        buffer += "\n" + "\n".join([human, ai])
+        buffer += "\n" + dialogue_turn
     return buffer
 
 # User input
 class ChatHistory(BaseModel):
     """Chat history with the bot."""
 
-    chat_history: List[Tuple[str, str]] = Field(
-        ...,
-        extra={"widget": {"type": "chat", "input": "question"}},
-    )
+    chat_history: List[str] = Field()
     question: str
     patient_id: str
 

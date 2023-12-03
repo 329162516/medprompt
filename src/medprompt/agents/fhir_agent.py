@@ -11,10 +11,7 @@ from .. import MedPrompter
 class SearchInput(BaseModel):
     """Chat history with the bot."""
 
-    chat_history: List[Tuple[str, str]] = Field(
-        ...,
-        extra={"widget": {"type": "chat", "input": "question"}},
-    )
+    chat_history: List[str] = Field()
     input: str
 
 
