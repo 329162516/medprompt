@@ -68,7 +68,7 @@ _llm_str = med_prompter.generate_prompt()
 clinical_llm = loads(_llm_str)
 
 def check_index(input_object):
-    patient_id = input_object
+    patient_id = input_object["patient_id"]
     if VECTORSTORE_NAME == "redis":
         try:
             vectorstore = Redis.from_existing_index(
