@@ -11,3 +11,6 @@ setuptools_scm
 wheel
 tox
 aioresponses
+langserve
+fastapi
+uvicorn
