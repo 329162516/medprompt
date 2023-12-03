@@ -222,7 +222,7 @@ requests==2.31.0
     #   langsmith
     #   responses
     #   sphinx
-responses==0.23.1
+responses==0.24.1
     # via -r dev-requirements.in
 setuptools-scm==7.1.0
     # via -r dev-requirements.in
@@ -265,8 +265,6 @@ tenacity==8.2.3
     #   langchain-core
 tox==4.4.12
     # via -r dev-requirements.in
-types-pyyaml==6.0.12.9
-    # via responses
 typing-extensions==4.8.0
     # via
     #   -c requirements.txt
