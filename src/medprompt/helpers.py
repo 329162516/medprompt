@@ -1,5 +1,8 @@
 from datetime import datetime, timedelta, timezone
-
+from typing import List
+import base64
+import pypdf
+from striprtf.striprtf import rtf_to_text
 
 def get_time_diff_from_today(timestamp, datetime_format="%Y-%m-%dT%H:%M:%S%z", return_type="auto"):
     """Return the difference between the given timestamp and today's date."""
@@ -46,3 +49,28 @@ def get_time_diff_from_today(timestamp, datetime_format="%Y-%m-%dT%H:%M:%S%z", r
         _return_type = "days"
 
     return str(int(_return)) + " " + _return_type
+
+def process_document_reference(content: List):
+    _data = ""
+    for _item in content:
+        item = _item["attachment"]
+        _decoded_data = base64.b64decode(
+            item["data"]).decode('utf-8', errors='ignore')
+        if item["contentType"] == "application/pdf":
+            _pdf_file = open(_decoded_data, 'rb')
+            _pdfReader = pypdf.PdfReader(_pdf_file)
+            for _page in _pdfReader.pages:
+                _text += _page.extract_text()
+            for _line in str(_text).split("\n"):
+                if (_line.strip()):
+                    _line = _line.replace('|', " ")
+                    _data = _data + _line + "\n"
+        #* TODO: handle other formats
+        if item["contentType"] == "application/rtf":
+            _text = rtf_to_text(_decoded_data, errors='ignore')
+            _data = ""
+            for line in str(_text).split("\n"):
+                if (line.strip()):
+                    line = line.replace('|', " ")
+                    _data = _data + line + "\n"
+    return _data

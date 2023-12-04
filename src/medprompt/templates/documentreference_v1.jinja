@@ -1,0 +1,13 @@
+{% if status is defined %}
+A {{ status }} document
+{% endif %}
+{% if type is defined %}
+of type {{ type.text }}
+{% endif %}
+{% if time_diff is defined %}
+recorded {{ time_diff(date, datetime_format|default("%Y-%m-%dT%H:%M:%S%z", true))}} ago
+{% endif %}
+{% if process_document is defined %}
+has the following content: {{ process_document(content) }}
+{% endif %}
+.
