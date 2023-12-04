@@ -5,15 +5,15 @@
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/dermatologist/medprompt)
 
 ## About
-* LLM prompts are inputs or queries that users can provide to elicit specific responses from a Large Language Model (LLM) AI. Example: [*You are an AI assistant. Summarize this clinical document in 250 words*](src/medprompt/templates/summary_v1.jinja)
+* LLM prompts are inputs or queries that users can provide to elicit specific responses from a Large Language Model (LLM). Example: [*You are an AI assistant. Summarize this clinical document in 250 words*](src/medprompt/templates/summary_v1.jinja)
 * Tools are functions used by *agents* for getting things done. Example: [To find patient ID from name.](src/medprompt/tools/find_patient.py)
-* Chains use LLM calls often in sequence to get things done. Example: [Answer a clinical question based on patient health record using RAG](src/medprompt/chains/rag_chain.py)
-* Agents orchestrate Chains and Tools using LLM to acheive the overarching goal. Example: [Answer a doctors question related to a patient. Find patient, get health record, generate embedding and generate answer](src/medprompt/agents/fhir_agent.py)
+* Chains are tools that use LLM calls to get things done. Example: [Answer a clinical question based on patient health record using RAG](src/medprompt/chains/rag_chain.py)
+* Agents uses an LLM to orchestrate Chains and Tools to acheive the overarching goal. Example: [Answer a doctors question related to a patient. Find patient, get health record, generate embedding and generate answer](src/medprompt/agents/fhir_agent.py)
 
 **MEDPrompt** is a collection of prompts, tools, chains  and agents for medical applications. **MEDPrompt also includes a collection of templates for using FHIR in LLM prompts (see below).** User contributions are highly appreciated!
 
 ### FHIR2Text -> Convert FHIR resources to plain text
-This repository includes templates for converting **FHIR resources into a text representation** that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. You can create **joint embeddings from structured and unstructured data** from FHIR resources!  🚒[**See this example usage**](/tests/test_fhir_observation_v1.py).
+This repository includes templates for converting **FHIR resources into a text representation** that can be injected into an LLM prompt. Only relevant information is extracted from the resource with simple transformations using helper functions. 🚒[**See this example usage**](/tests/test_fhir_observation_v1.py).
 
 ### FHIR2Calculator -> Calculate clinical scores from a FHIR Bundle (*Work in progress*)
 Clinical calculators are tools that help healthcare professionals make medical decisions by providing them with quick and easy access to various medical formulas, scores, and algorithms. Calculations performed by LLMs are not reliable. FHIR2Calculator performs calculations on data fields extracted from a FHIR bundle and outputs the results as plain text that can be injected into LLM prompts.
@@ -33,6 +33,7 @@ Documentation is in progress. Any help will be highly appreciated.
 ## See [Examples folder](/examples)
 1. [Observation](/examples/fhirToText.ipynb)
 2. [FHIR Bundle](/examples/fhirBundle.ipynb)
+More documentation and examples to follow..
 
 ### Install
 
@@ -78,3 +79,4 @@ If you find this project useful, give us a star. It helps others discover the pr
 
 ## Contributers
 * [Bell Eapen](https://nuchange.ca) | [![Twitter Follow](https://img.shields.io/twitter/follow/beapen?style=social)](https://twitter.com/beapen)
+* [My Blog post](https://nuchange.ca/2023/12/medprompt-how-to-architect-llm-solutions-for-healthcare.html)
