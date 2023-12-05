@@ -51,7 +51,7 @@ class GetMedicalRecordTool(StructuredTool):
             response.raise_for_status()
             _response = json.loads(response.text)
         except:
-            return "Sorry the FHIR server is not responding. Please try again later."
+            return "Sorry I cannot find the answer as the FHIR server is not responding."
         if _response["total"] >100:
             return "Sorry, the patient's record is too large to be loaded."
         elif _response["total"] < 1:
@@ -74,7 +74,7 @@ class GetMedicalRecordTool(StructuredTool):
             response.raise_for_status()
             _response = json.loads(response.text)
         except:
-            return "Sorry the FHIR server is not responding. Please try again later."
+            return "Sorry I cannot find the answer as the FHIR server is not responding."
         if _response["total"] >100:
             return "Sorry, the patient's record is too large to be loaded."
         elif _response["total"] < 1:

@@ -110,7 +110,7 @@ class FhirPatientSearchTool(StructuredTool):
             _response = json.loads(response.text)
         except:
             # raise ValueError("FHIR server not responding")
-            return "Sorry the FHIR server is not responding. Please try again later."
+            return "Sorry I cannot find the answer as the FHIR server is not responding."
         return _response
 
     async def _acall_fhir_server(self, url, params):
@@ -131,7 +131,7 @@ class FhirPatientSearchTool(StructuredTool):
             _response = json.loads(response.text)
         except:
             # raise ValueError("FHIR server not responding")
-            return "Sorry the FHIR server is not responding. Please try again later."
+            return "Sorry I cannot find the answer as the FHIR server is not responding."
         return _response
 
 
@@ -143,10 +143,10 @@ class FhirPatientSearchTool(StructuredTool):
             _count = len(_response["entry"])
         except:
             #raise ValueError("FHIR server not responding")
-            return "Sorry the FHIR server is not responding. Please try again later."
+            return "Sorry I cannot find the answer as the FHIR server is not responding."
         if _count == 0:
             return "No patient found"
         elif _count == 1:
             return "The patient id is {}".format(_response["entry"][0]["resource"]["id"])
         else:
-            return "There are {} patients with this name. Please try again with more details like a birth date.".format(_count)
+            return "Sorry, I cannot find the answer as there are {} patients with this demographic.".format(_count)
