@@ -70,8 +70,7 @@ class CreateEmbeddingFromFhirBundle(BaseTool):
             # if resource["resourceType"] == "Patient":
             #     patient_id = resource["id"]
             if resource["resourceType"] == "Patient" or resource["resourceType"] == "Observation" \
-                or resource["resourceType"] == "Condition" or resource["resourceType"] == "Procedure" \
-                or resource["resourceType"] == "MedicationRequest" or resource["resourceType"] == "DiagnosticReport":
+                or resource["resourceType"] == "DocumentReference":
                 resource["time_diff"] = get_time_diff_from_today
                 template_name = resource['resourceType'].lower() + "_v1.jinja"
                 prompt.set_template(template_name=template_name)
