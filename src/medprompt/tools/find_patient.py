@@ -66,15 +66,8 @@ class FhirPatientSearchTool(StructuredTool):
             if birth_date:
                 params["birthdate"] = birth_date
         _response = self._call_fhir_server(url, params)
-        try:
-            if _response["total"] == 0:
-                return "No patient found"
-            elif _response["total"] == 1:
-                return "The patient id is {}".format(_response["entry"][0]["resource"]["id"])
-            else:
-                return "There are multiple patients with this name. Please try again with more details like a birth date."
-        except:
-            return "The server did not send a valid response. Please try again later."
+        return self.process_response(_response)
+    
     async def _arun(
             self,
             given: str = None,
@@ -97,20 +90,7 @@ class FhirPatientSearchTool(StructuredTool):
             if birth_date:
                 params["birthdate"] = birth_date
         _response = await self._acall_fhir_server(url, params)
-        _count = 0
-        try:
-            _count = _response["total"]
-        except KeyError:
-            _count = len(_response["entry"])
-        except:
-            #raise ValueError("FHIR server not responding")
-            return "Sorry the FHIR server is not responding. Please try again later."
-        if _count == 0:
-            return "No patient found"
-        elif _count == 1:
-            return "The patient id is {}".format(_response["entry"][0]["resource"]["id"])
-        else:
-            return "There are {} patients with this name. Please try again with more details like a birth date.".format(_count)
+        return self.process_response(_response)
 
     #* Override this method to call your FHIR server
     def _call_fhir_server(self, url, params):
@@ -153,3 +133,20 @@ class FhirPatientSearchTool(StructuredTool):
             # raise ValueError("FHIR server not responding")
             return "Sorry the FHIR server is not responding. Please try again later."
         return _response
+
+
+    def process_response(_response):
+        _count = 0
+        try:
+            _count = _response["total"]
+        except KeyError:
+            _count = len(_response["entry"])
+        except:
+            #raise ValueError("FHIR server not responding")
+            return "Sorry the FHIR server is not responding. Please try again later."
+        if _count == 0:
+            return "No patient found"
+        elif _count == 1:
+            return "The patient id is {}".format(_response["entry"][0]["resource"]["id"])
+        else:
+            return "There are {} patients with this name. Please try again with more details like a birth date.".format(_count)
