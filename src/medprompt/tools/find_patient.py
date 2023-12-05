@@ -67,7 +67,7 @@ class FhirPatientSearchTool(StructuredTool):
                 params["birthdate"] = birth_date
         _response = self._call_fhir_server(url, params)
         return self.process_response(_response)
-    
+
     async def _arun(
             self,
             given: str = None,
@@ -135,7 +135,7 @@ class FhirPatientSearchTool(StructuredTool):
         return _response
 
 
-    def process_response(_response):
+    def process_response(self, _response):
         _count = 0
         try:
             _count = _response["total"]
