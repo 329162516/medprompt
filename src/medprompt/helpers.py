@@ -1,4 +1,27 @@
-from datetime import datetime, timedelta, timezone
+"""
+ Copyright 2023 Bell Eapen
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+"""
+
+
+import base64
+import logging
+from datetime import datetime, timezone
+from typing import List
+
+import pypdf
+from striprtf.striprtf import rtf_to_text
 
 
 def get_time_diff_from_today(timestamp, datetime_format="%Y-%m-%dT%H:%M:%S%z", return_type="auto"):
@@ -46,3 +69,47 @@ def get_time_diff_from_today(timestamp, datetime_format="%Y-%m-%dT%H:%M:%S%z", r
         _return_type = "days"
 
     return str(int(_return)) + " " + _return_type
+
+def process_document_reference(content: List) -> str:
+    """Process document reference.
+
+    Args:
+        content (List): List of document references
+
+    Returns:
+        str: Processed document content
+    """
+    _data = ""
+    try:
+        for _item in content:
+            item = _item["attachment"]
+            _decoded_data = base64.b64decode(
+                item["data"]).decode('utf-8', errors='ignore')
+
+            if item["contentType"] == "application/rtf":
+                try:
+                    _text = rtf_to_text(_decoded_data, errors='ignore')
+                    _data = ""
+                    for line in str(_text).split("\n"):
+                        if (line.strip()):
+                            line = line.replace('|', " ")
+                            _data = _data + line + "\n"
+                except:
+                    logging.debug("Error in parsing RTF file.")
+
+            # content may have both types. Parse pdf last
+            if item["contentType"] == "application/pdf" and _data == "":
+                try:
+                    _pdf_file = open(_decoded_data, 'rb')
+                    _pdfReader = pypdf.PdfReader(_pdf_file)
+                    for _page in _pdfReader.pages:
+                        _text += _page.extract_text()
+                    for _line in str(_text).split("\n"):
+                        if (_line.strip()):
+                            _line = _line.replace('|', " ")
+                            _data = _data + _line + "\n"
+                except:
+                    logging.debug("Error in parsing PDF file.")
+    except:
+        logging.debug("Error in parsing document reference.")
+    return _data

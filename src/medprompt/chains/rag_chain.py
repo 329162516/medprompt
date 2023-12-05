@@ -18,7 +18,6 @@
 import logging
 import os
 from typing import List
-from fastapi import FastAPI
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.load import loads
 from langchain.prompts import ChatPromptTemplate
@@ -28,7 +27,6 @@ from langchain.schema.output_parser import StrOutputParser
 from langchain.schema.runnable import RunnableMap, RunnablePassthrough
 from langchain.tools import tool
 from langchain.vectorstores import Chroma, Redis
-from langserve import add_routes
 from langserve.pydantic_v1 import BaseModel
 
 from .. import MedPrompter
@@ -36,7 +34,7 @@ from ..tools import CreateEmbeddingFromFhirBundle
 
 med_prompter = MedPrompter()
 _TEMPLATE = """Given the following chat history and a follow up question, rephrase the
-follow up question to be a standalone question, in its original language that includes context from previous chat history.
+follow up question to be a standalone question, in its original language that includes context from chat history below.
 
 Chat History:
 {chat_history}
@@ -137,7 +135,7 @@ def get_runnable(**kwargs):
         context=context,
         input=input,
     )
-    _chain = _inputs | ANSWER_PROMPT | main_llm | StrOutputParser()
+    _chain = _inputs | ANSWER_PROMPT | clinical_llm | StrOutputParser()
     chain = _chain.with_types(input_type=ChatHistory)
     return chain
 

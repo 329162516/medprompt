@@ -36,7 +36,6 @@ class GetMedicalRecordTool(StructuredTool):
     Returns the patient's medical record as a FHIR bundle with the FHIR resources including Patient, Observation, Condition, Procedure and MedicationRequest.
     """
     args_schema: Type[BaseModel] = SearchInput
-    # args = args_schema
 
     def _run(
             self,
@@ -63,7 +62,7 @@ class GetMedicalRecordTool(StructuredTool):
     async def _arun(
             self,
             patient_id: str = None,
-            run_manager: Optional[CallbackManagerForToolRun] = None
+            run_manager: Optional[AsyncCallbackManagerForToolRun] = None
             ) -> Any:
         url = os.environ.get("FHIR_SERVER_URL", 'http://hapi.fhir.org/baseR4')
         if not url:
