@@ -1,0 +1,1 @@
+* Change module name in .coverage
