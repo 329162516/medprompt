@@ -28,6 +28,7 @@ from langchain.schema.runnable import RunnableMap, RunnablePassthrough
 from langchain.tools import tool
 from langchain.vectorstores import Chroma, Redis
 from langserve.pydantic_v1 import BaseModel
+from pydantic import Field
 
 from .. import MedPrompter
 from ..tools import CreateEmbeddingFromFhirBundle
@@ -42,11 +43,15 @@ Follow Up Question: {input}
 Standalone question:"""
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_TEMPLATE)
 
-ANSWER_TEMPLATE = """Answer the clinical question based only on the following context:
+ANSWER_TEMPLATE = """
+Give clinical interpretations based only on the facts in the context.
+Mention the time period whenever possible.
+Do not make up any information that is not in the context.
+Answer the clinical question based ONLY on the following context:
 {context}
 
 Question: {input}
-Give clinical interpretations based only on the facts in the context.
+
 """
 ANSWER_PROMPT = ChatPromptTemplate.from_template(ANSWER_TEMPLATE)
 DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="{page_content}")
@@ -115,9 +120,9 @@ def _format_chat_history(chat_history: List[str]) -> str:
 class ChatHistory(BaseModel):
     """Chat history with the bot."""
 
-    chat_history: List[str]
-    input: str
-    patient_id: str
+    chat_history: List[str] = Field(default=[])
+    input: str = Field(default="Please give a summary of the patient's history.")
+    patient_id: str = Field(default="123unknown")
 
 def get_runnable(**kwargs):
     """Get the runnable chain."""
