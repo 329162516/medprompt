@@ -15,6 +15,7 @@
 """
 
 import os
+import logging
 from typing import Any, Optional, Type
 from langchain.callbacks.manager import (AsyncCallbackManagerForToolRun,
                                          CallbackManagerForToolRun)
@@ -65,24 +66,28 @@ class CreateEmbeddingFromFhirBundle(BaseTool):
         # Get the patient's medical record
         get_medical_record_tool = GetMedicalRecordTool()
         bundle_input = get_medical_record_tool.run(patient_id)
-        for entry in bundle_input["entry"]:
-            resource = entry["resource"]
-            # if resource["resourceType"] == "Patient":
-            #     patient_id = resource["id"]
-            if resource["resourceType"] == "Patient" or resource["resourceType"] == "Observation" \
-                or resource["resourceType"] == "DocumentReference":
-                resource["time_diff"] = get_time_diff_from_today
-                template_name = resource['resourceType'].lower() + "_v1.jinja"
-                prompt.set_template(template_name=template_name)
-                chunk = {
-                    "page_content": prompt.generate_prompt(resource).replace("\n", " "),
-                    "metadata": {
-                        "resourceType": resource["resourceType"],
-                        "resourceID": resource["id"],
-                        "patientID": patient_id
+        try:
+            for entry in bundle_input["entry"]:
+                resource = entry["resource"]
+                # if resource["resourceType"] == "Patient":
+                #     patient_id = resource["id"]
+                if resource["resourceType"] == "Patient" or resource["resourceType"] == "Observation" \
+                    or resource["resourceType"] == "DocumentReference":
+                    resource["time_diff"] = get_time_diff_from_today
+                    template_name = resource['resourceType'].lower() + "_v1.jinja"
+                    prompt.set_template(template_name=template_name)
+                    chunk = {
+                        "page_content": prompt.generate_prompt(resource).replace("\n", " "),
+                        "metadata": {
+                            "resourceType": resource["resourceType"],
+                            "resourceID": resource["id"],
+                            "patientID": patient_id
+                        }
                     }
-                }
-                chunks.append(chunk)
+                    chunks.append(chunk)
+        except:
+            logging.info("No Data found for patient with id: " + patient_id)
+            return chunks
         try:
             # Store in Redis
             if self. VECTORSTORE_NAME == "redis":

@@ -121,7 +121,7 @@ class ChatHistory(BaseModel):
     """Chat history with the bot."""
 
     chat_history: List[str] = Field(default=[])
-    input: str = Field(default="Please give a summary of the patient's history.")
+    input: str = Field(default="Give a summary.")
     patient_id: str = Field(default="123unknown")
 
 def get_runnable(**kwargs):
